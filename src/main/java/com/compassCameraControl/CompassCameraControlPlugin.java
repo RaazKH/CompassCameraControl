@@ -1,53 +1,43 @@
 package com.compassCameraControl;
 
-import com.google.inject.Provides;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
-import net.runelite.api.GameState;
-import net.runelite.api.events.GameStateChanged;
-import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.api.MenuAction;
+import net.runelite.api.events.MenuOptionClicked;
 
 @Slf4j
 @PluginDescriptor(
-	name = "Example"
+	name = "Compass Camera Control"
 )
 public class CompassCameraControlPlugin extends Plugin
 {
 	@Inject
 	private Client client;
 
-	@Inject
-	private CompassCameraControlConfig config;
-
-	@Override
-	protected void startUp() throws Exception
-	{
-		log.info("Example started!");
-	}
-
-	@Override
-	protected void shutDown() throws Exception
-	{
-		log.info("Example stopped!");
-	}
+	private static final int NORTH_YAW = 0;
+	private static final int SOUTH_YAW = 1024;
+	private static final int EAST_YAW = 512;
+	private static final int WEST_YAW = 1536;
 
 	@Subscribe
-	public void onGameStateChanged(GameStateChanged gameStateChanged)
-	{
-		if (gameStateChanged.getGameState() == GameState.LOGGED_IN)
-		{
-			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Example says " + config.greeting(), null);
+	public void onMenuOptionClicked(MenuOptionClicked event) {
+		if (event.getMenuAction() == MenuAction.CC_OP && event.getMenuOption().equals("Look North")) {
+			if (client.getCameraYaw() == NORTH_YAW) {
+				client.setCameraYawTarget(SOUTH_YAW);
+				event.consume();
+			}
+			if (client.getCameraYaw() == SOUTH_YAW) {
+				client.setCameraYawTarget(EAST_YAW);
+				event.consume();
+			}
+			if (client.getCameraYaw() == EAST_YAW) {
+				client.setCameraYawTarget(WEST_YAW);
+				event.consume();
+			}
 		}
-	}
-
-	@Provides
-	CompassCameraControlConfig provideConfig(ConfigManager configManager)
-	{
-		return configManager.getConfig(CompassCameraControlConfig.class);
 	}
 }
