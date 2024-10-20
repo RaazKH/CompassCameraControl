@@ -6,6 +6,7 @@ import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.MenuAction;
+import net.runelite.api.SoundEffectID;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -46,6 +47,7 @@ public class CompassCameraControlPlugin extends Plugin
 					break;
 			}
 			event.consume();
+			client.playSoundEffect(SoundEffectID.UI_BOOP);
 		}
 	}
 
