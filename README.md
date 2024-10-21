@@ -1,6 +1,6 @@
 # Compass Camera Control
 
-A RuneLite plugin that allows you to control the camera direction by simply clicking the compass orb, cycling through cardinal directions without using the arrow keys. Ideal for trackpad users!
+A RuneLite plugin that allows you to control the camera direction by simply clicking the compass orb, cycling through cardinal directions or snapping to the closest one. 
 
 ## Configuration
 

@@ -15,7 +15,9 @@ import net.runelite.client.plugins.PluginDescriptor;
 
 @Slf4j
 @PluginDescriptor(
-	name = "Compass Camera Control"
+	name = "Compass Camera Control",
+	description = "Expands compass functionality",
+	tags = {"camera, compass, control, navigation, usability, convenience"}
 )
 public class CompassCameraControlPlugin extends Plugin
 {
@@ -106,7 +108,6 @@ public class CompassCameraControlPlugin extends Plugin
 		if (dWest < closestYawDistance)
 		{
 			closestYaw = WEST_YAW;
-			closestYawDistance = dWest;
 		}
 
 		client.setCameraYawTarget(closestYaw);
