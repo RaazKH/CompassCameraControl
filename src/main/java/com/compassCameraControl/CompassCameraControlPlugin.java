@@ -8,16 +8,19 @@ import net.runelite.api.Client;
 import net.runelite.api.MenuAction;
 import net.runelite.api.SoundEffectID;
 import net.runelite.api.events.MenuOptionClicked;
+import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.api.MenuEntry;
+import org.apache.commons.lang3.ArrayUtils;
 
 @Slf4j
 @PluginDescriptor(
-	name = "Compass Camera Control",
-	description = "Expands compass functionality",
-	tags = {"camera, compass, control, navigation, usability, convenience"}
+		name = "Compass Camera Control",
+		description = "Expands compass functionality",
+		tags = {"camera, compass, control, navigation, usability, convenience"}
 )
 public class CompassCameraControlPlugin extends Plugin
 {
@@ -32,23 +35,56 @@ public class CompassCameraControlPlugin extends Plugin
 	private static final int EAST_YAW = 512;
 	private static final int WEST_YAW = 1536;
 
+	private static final String OPTION_SNAP_CARDINAL = "Snap Cardinal";
+	private static final String OPTION_CYCLE = "Cycle";
+
 	@Subscribe
-	public void onMenuOptionClicked(MenuOptionClicked event)
+	public void onMenuEntryAdded(MenuEntryAdded event)
 	{
-		if (event.getMenuAction() == MenuAction.CC_OP && event.getMenuOption().equals("Look North"))
+		if (event.getOption().equals("Look North"))
 		{
+			String newOption;
 			switch (config.controlMode())
 			{
 				case SNAP_TO_CLOSEST:
-					alignYaw();
+					newOption = OPTION_SNAP_CARDINAL;
 					break;
 
 				case CYCLE:
 				default:
-					cycleYaw();
+					newOption = OPTION_CYCLE;
 					break;
 			}
-			event.consume();
+
+			MenuEntry[] menuEntries = client.getMenu().getMenuEntries();
+			MenuEntry newEntry = client.getMenu().createMenuEntry(menuEntries.length - 1)
+					.setOption(newOption)
+					.setIdentifier(event.getIdentifier())
+					.setParam0(event.getActionParam0())
+					.setParam1(event.getActionParam1())
+					.setType(MenuAction.CC_OP);
+
+			menuEntries = ArrayUtils.add(menuEntries, newEntry);
+			client.getMenu().setMenuEntries(menuEntries);
+		}
+	}
+
+	@Subscribe
+	public void onMenuOptionClicked(MenuOptionClicked event)
+	{
+		if (event.getMenuAction() == MenuAction.CC_OP)
+		{
+			String selectedOption = event.getMenuOption();
+			if (selectedOption.equals(OPTION_SNAP_CARDINAL))
+			{
+				alignYaw();
+				event.consume();
+			}
+			else if (selectedOption.equals(OPTION_CYCLE))
+			{
+				cycleYaw();
+				event.consume();
+			}
 			client.playSoundEffect(SoundEffectID.UI_BOOP);
 		}
 	}
