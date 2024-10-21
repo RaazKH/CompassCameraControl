@@ -18,9 +18,9 @@ import org.apache.commons.lang3.ArrayUtils;
 
 @Slf4j
 @PluginDescriptor(
-		name = "Compass Camera Control",
-		description = "Expands compass functionality",
-		tags = {"camera, compass, control, navigation, usability, convenience"}
+	name = "Compass Camera Control",
+	description = "Expands compass functionality",
+	tags = {"camera, compass, control, navigation, usability, convenience"}
 )
 public class CompassCameraControlPlugin extends Plugin
 {
@@ -35,8 +35,8 @@ public class CompassCameraControlPlugin extends Plugin
 	private static final int EAST_YAW = 512;
 	private static final int WEST_YAW = 1536;
 
-	private static final String OPTION_SNAP_CARDINAL = "Snap Cardinal";
-	private static final String OPTION_CYCLE = "Cycle";
+	private static final String SNAP_CARDINAL = "Snap Cardinal";
+	private static final String CYCLE_CARDINAL = "Cycle Cardinal";
 
 	@Subscribe
 	public void onMenuEntryAdded(MenuEntryAdded event)
@@ -47,21 +47,18 @@ public class CompassCameraControlPlugin extends Plugin
 			switch (config.controlMode())
 			{
 				case SNAP_TO_CLOSEST:
-					newOption = OPTION_SNAP_CARDINAL;
+					newOption = SNAP_CARDINAL;
 					break;
 
 				case CYCLE:
 				default:
-					newOption = OPTION_CYCLE;
+					newOption = CYCLE_CARDINAL;
 					break;
 			}
 
 			MenuEntry[] menuEntries = client.getMenu().getMenuEntries();
 			MenuEntry newEntry = client.getMenu().createMenuEntry(menuEntries.length - 1)
 					.setOption(newOption)
-					.setIdentifier(event.getIdentifier())
-					.setParam0(event.getActionParam0())
-					.setParam1(event.getActionParam1())
 					.setType(MenuAction.CC_OP);
 
 			menuEntries = ArrayUtils.add(menuEntries, newEntry);
@@ -74,18 +71,20 @@ public class CompassCameraControlPlugin extends Plugin
 	{
 		if (event.getMenuAction() == MenuAction.CC_OP)
 		{
-			String selectedOption = event.getMenuOption();
-			if (selectedOption.equals(OPTION_SNAP_CARDINAL))
+			switch (event.getMenuOption())
 			{
-				alignYaw();
-				event.consume();
+				case SNAP_CARDINAL:
+					alignYaw();
+					event.consume();
+					client.playSoundEffect(SoundEffectID.UI_BOOP);
+					break;
+
+				case CYCLE_CARDINAL:
+					cycleYaw();
+					event.consume();
+					client.playSoundEffect(SoundEffectID.UI_BOOP);
+					break;
 			}
-			else if (selectedOption.equals(OPTION_CYCLE))
-			{
-				cycleYaw();
-				event.consume();
-			}
-			client.playSoundEffect(SoundEffectID.UI_BOOP);
 		}
 	}
 
