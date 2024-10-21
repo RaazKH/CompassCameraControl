@@ -4,15 +4,21 @@ A RuneLite plugin that allows you to control the camera direction by simply clic
 
 ## Configuration
 
-This plugin is simple and doesn’t require additional configuration. By default, it controls the camera based on the current facing direction:
+This plugin is simple and has two modes:
 
-How it works:
+#### Cycle Mode (default)
+
 1. If facing North, the camera will rotate to South.
 2. If facing South, it will rotate to East.
 3. If facing East, it will rotate to West.
 4. If facing any other direction, it will rotate North.
 
 The process repeats when clicking the compass orb.
+
+#### Snap to Closest
+
+When clicking the compass, the camera will snap to the closest cardinal direction.
+Useful for spinning the camera manually, then aligning to the grid.
 
 ## Issues and Feedback
 
