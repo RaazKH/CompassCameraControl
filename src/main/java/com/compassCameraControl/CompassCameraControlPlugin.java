@@ -108,7 +108,6 @@ public class CompassCameraControlPlugin extends Plugin
 		if (dWest < closestYawDistance)
 		{
 			closestYaw = WEST_YAW;
-			closestYawDistance = dWest;
 		}
 
 		client.setCameraYawTarget(closestYaw);
