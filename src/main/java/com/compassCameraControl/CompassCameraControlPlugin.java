@@ -6,15 +6,13 @@ import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.MenuAction;
+import net.runelite.api.MenuEntry;
 import net.runelite.api.SoundEffectID;
-import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.api.MenuEntry;
-import org.apache.commons.lang3.ArrayUtils;
 
 @Slf4j
 @PluginDescriptor(
@@ -56,35 +54,27 @@ public class CompassCameraControlPlugin extends Plugin
 					break;
 			}
 
-			MenuEntry[] menuEntries = client.getMenu().getMenuEntries();
-			MenuEntry newEntry = client.getMenu().createMenuEntry(menuEntries.length - 1)
-					.setOption(newOption)
-					.setType(MenuAction.CC_OP);
-
-			menuEntries = ArrayUtils.add(menuEntries, newEntry);
-			client.getMenu().setMenuEntries(menuEntries);
+			client.getMenu()
+				.createMenuEntry(-1)
+				.setType(MenuAction.RUNELITE_HIGH_PRIORITY)
+				.setOption(newOption)
+				.onClick(this::onCompassAction);
 		}
 	}
 
-	@Subscribe
-	public void onMenuOptionClicked(MenuOptionClicked event)
+	public void onCompassAction(MenuEntry event)
 	{
-		if (event.getMenuAction() == MenuAction.CC_OP)
+		switch (event.getOption())
 		{
-			switch (event.getMenuOption())
-			{
-				case SNAP_CARDINAL:
-					alignYaw();
-					event.consume();
-					client.playSoundEffect(SoundEffectID.UI_BOOP);
-					break;
+			case SNAP_CARDINAL:
+				alignYaw();
+				client.playSoundEffect(SoundEffectID.UI_BOOP);
+				break;
 
-				case CYCLE_CARDINAL:
-					cycleYaw();
-					event.consume();
-					client.playSoundEffect(SoundEffectID.UI_BOOP);
-					break;
-			}
+			case CYCLE_CARDINAL:
+				cycleYaw();
+				client.playSoundEffect(SoundEffectID.UI_BOOP);
+				break;
 		}
 	}
 
