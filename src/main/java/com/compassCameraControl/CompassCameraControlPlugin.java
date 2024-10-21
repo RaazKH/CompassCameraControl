@@ -79,7 +79,10 @@ public class CompassCameraControlPlugin extends Plugin
 
 	private void alignYaw()
 	{
-		int dNorth = Math.abs(client.getCameraYawTarget() - NORTH_YAW);
+		int dNorth = Math.min(
+			Math.abs(client.getCameraYawTarget() - NORTH_YAW), // north-east quadrant
+			Math.abs(client.getCameraYawTarget() - (NORTH_YAW + 2048)) // north-west quadrant
+		);
 		int closestYaw = NORTH_YAW;
 		int closestYawDistance = dNorth;
 
