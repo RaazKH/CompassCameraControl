@@ -18,7 +18,8 @@ The process repeats when clicking the compass orb.
 
 #### Snap to Closest
 
-When clicking the compass, the camera will snap to the closest cardinal direction. This is useful for spinning the camera manually and then aligning to the grid.
+When clicking the compass, the camera will snap to the closest cardinal direction.
+Useful for spinning the camera manually, then aligning to the grid.
 
 ---
 
