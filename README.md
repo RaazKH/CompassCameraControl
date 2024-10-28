@@ -1,7 +1,7 @@
 # Compass Camera Control
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/RaazKH/CompassCameraControl?include_prereleases&logo=github)
 
-A RuneLite plugin that allows you to control the camera direction by simply clicking the compass orb, cycling through cardinal directions or snapping to the closest one. 
+A RuneLite plugin that allows you to control the camera direction by simply clicking the compass orb, cycling through cardinal directions or snapping to the closest one.
 
 ## Configuration
 
@@ -20,6 +20,16 @@ The process repeats when clicking the compass orb.
 
 When clicking the compass, the camera will snap to the closest cardinal direction.
 Useful for spinning the camera manually, then aligning to the grid.
+
+---
+
+### Shift-Click Option
+
+You can configure how the plugin responds to clicks on the compass:
+
+- **Off**: Always active, ignoring the Shift key.
+- **On Shift**: Only works when Shift is held down.
+- **Off Shift**: Works only when Shift is not held down.
 
 ## Issues and Feedback
 
