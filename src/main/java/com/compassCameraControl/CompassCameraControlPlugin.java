@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
+import net.runelite.api.KeyCode;
 import net.runelite.api.MenuAction;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.SoundEffectID;
@@ -41,6 +42,9 @@ public class CompassCameraControlPlugin extends Plugin
 	{
 		if (event.getOption().equals("Look North"))
 		{
+			if (config.shiftClickMode() == ShiftMode.ONSHIFT && !client.isKeyPressed(KeyCode.KC_SHIFT)) { return; }
+			if (config.shiftClickMode() == ShiftMode.OFFSHIFT && client.isKeyPressed(KeyCode.KC_SHIFT)) { return; }
+
 			String newOption;
 			switch (config.controlMode())
 			{

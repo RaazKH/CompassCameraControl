@@ -7,7 +7,6 @@ import net.runelite.client.config.ConfigItem;
 @ConfigGroup("compasscameracontrol")
 public interface CompassCameraControlConfig extends Config
 {
-
 	@ConfigItem(
 		keyName = "controlMode",
 		name = "Mode",
@@ -19,4 +18,15 @@ public interface CompassCameraControlConfig extends Config
 		return ControlMode.CYCLE;
 	}
 
+	@ConfigItem(
+		keyName = "shiftClickMode",
+		name = "Shift-Click",
+		description = "Off: Always active, ignores Shift<br/>" +
+			"On Shift: Only works when Shift is held<br/>" +
+			"Off Shift: Only works when Shift is not held"
+	)
+	default ShiftMode shiftClickMode()
+	{
+		return ShiftMode.OFF;
+	}
 }
