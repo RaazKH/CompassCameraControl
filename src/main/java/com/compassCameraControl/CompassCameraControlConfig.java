@@ -20,12 +20,12 @@ public interface CompassCameraControlConfig extends Config
 	}
 
 	@ConfigItem(
-			keyName = "cycleOrder",
-			name = "Cycle Order",
-			position = 2,
-			description = "Example 1: N-S-E-W<br/>" +
-				"Example 2: S-N-E<br/>" +
-				"Example 3: N-S"
+		keyName = "cycleOrder",
+		name = "Cycle Order",
+		position = 2,
+		description = "Example 1: N-S-E-W<br/>" +
+			"Example 2: S-N-E<br/>" +
+			"Example 3: N-S"
 	)
 	default String cycleOrder()
 	{
