@@ -11,7 +11,7 @@ public interface CompassCameraControlConfig extends Config
 		keyName = "controlMode",
 		name = "Mode",
 		position = 1,
-		description = "Cycle: North -> South -> East -> West<br/>" +
+		description = "Cycle: North -> South -> East -> West (default)<br/>" +
 			"Snap to Closest: Snaps the camera to the nearest cardinal direction"
 	)
 	default ControlMode controlMode()
@@ -23,7 +23,9 @@ public interface CompassCameraControlConfig extends Config
 			keyName = "cycleOrder",
 			name = "Cycle Order",
 			position = 2,
-			description = "Specify the cycle order, e.g., N,E,S,W or N,S"
+			description = "Example 1: N-S-E-W<br/>" +
+				"Example 2: S-N-E<br/>" +
+				"Example 3: N-S"
 	)
 	default String cycleOrder()
 	{
