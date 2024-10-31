@@ -23,6 +23,14 @@ Useful for spinning the camera manually, then aligning to the grid.
 
 ---
 
+### Custom Cycle Order
+
+You can specify a custom order for cycling through directions. For example, if you prefer to cycle between North and South, you can set the cycle order to `N,S`. Only `N`, `S`, `W`, and `E` are valid characters for this field, all other characters will be ignored.
+
+This field is **not** case-sensitive. Non-unique cardinal directions will be ignored. So `N,S,E,S` would cycle through `N,S,E`, the final `S` being a duplicate and thus is ignored.
+
+---
+
 ### Shift-Click Option
 
 You can configure how the plugin responds to clicks on the compass:

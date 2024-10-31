@@ -10,7 +10,8 @@ public interface CompassCameraControlConfig extends Config
 	@ConfigItem(
 		keyName = "controlMode",
 		name = "Mode",
-		description = "Cycle: North -> South -> East -> West<br/>" +
+		position = 1,
+		description = "Cycle: North -> South -> East -> West (default)<br/>" +
 			"Snap to Closest: Snaps the camera to the nearest cardinal direction"
 	)
 	default ControlMode controlMode()
@@ -19,8 +20,22 @@ public interface CompassCameraControlConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "cycleOrder",
+		name = "Cycle Order",
+		position = 2,
+		description = "Example 1: N-S-E-W<br/>" +
+			"Example 2: S-N-E<br/>" +
+			"Example 3: N-S"
+	)
+	default String cycleOrder()
+	{
+		return "N,S,E,W";
+	}
+
+	@ConfigItem(
 		keyName = "shiftClickMode",
 		name = "Shift-Click",
+		position = 3,
 		description = "Off: Always active, ignores Shift<br/>" +
 			"On Shift: Only works when Shift is held<br/>" +
 			"Off Shift: Only works when Shift is not held"
