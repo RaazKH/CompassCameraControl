@@ -3,6 +3,7 @@ package com.compassCameraControl;
 import com.google.inject.Provides;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.KeyCode;
@@ -31,8 +32,15 @@ public class CompassCameraControlPlugin extends Plugin
 
 	private static final int NORTH_YAW = 0;
 	private static final int SOUTH_YAW = 1024;
-	private static final int EAST_YAW = 512;
-	private static final int WEST_YAW = 1536;
+	private static final int EAST_YAW = 1536;
+	private static final int WEST_YAW = 512;
+
+	private static final Map<Character, Integer> directionMap = Map.of(
+		'N', NORTH_YAW,
+		'S', SOUTH_YAW,
+		'E', EAST_YAW,
+		'W', WEST_YAW
+	);
 
 	private static final String SNAP_CARDINAL = "Snap Cardinal";
 	private static final String CYCLE_CARDINAL = "Cycle Cardinal";
@@ -92,26 +100,55 @@ public class CompassCameraControlPlugin extends Plugin
 		return configManager.getConfig(CompassCameraControlConfig.class);
 	}
 
+	private String getValidatedCycleOrder()
+	{
+		// Retain only "N", "E", "S", "W"
+		return config.cycleOrder().toUpperCase().replaceAll("[^NESW]", "")
+			.chars()
+			.distinct()
+			.limit(4)
+			.collect(StringBuilder::new,
+				StringBuilder::appendCodePoint,
+				StringBuilder::append)
+			.toString();
+	}
+
 	private void cycleYaw()
 	{
-		switch (client.getCameraYaw())
+		String cycleOrder = getValidatedCycleOrder();
+		int[] yawOrder = new int[cycleOrder.length()];
+
+		int count = 0;
+		for (char direction : cycleOrder.toCharArray())
 		{
-			case NORTH_YAW:
-				client.setCameraYawTarget(SOUTH_YAW);
-				break;
-
-			case SOUTH_YAW:
-				client.setCameraYawTarget(EAST_YAW);
-				break;
-
-			case EAST_YAW:
-				client.setCameraYawTarget(WEST_YAW);
-				break;
-
-			default:
-				client.setCameraYawTarget(NORTH_YAW);
+			Integer yaw = directionMap.get(direction);
+			if (yaw != null)
+			{
+				yawOrder[count++] = yaw;
+			}
 		}
+
+		if (count == 0)
+		{
+			yawOrder = new int[]{ NORTH_YAW, SOUTH_YAW, EAST_YAW, WEST_YAW };
+			count = 4;
+		}
+
+		int currentYaw = client.getCameraYaw();
+		int nextYaw = yawOrder[0];
+
+		for (int i = 0; i < count; i++)
+		{
+			if (yawOrder[i] == currentYaw)
+			{
+				nextYaw = yawOrder[(i + 1) % count];
+				break;
+			}
+		}
+
+		client.setCameraYawTarget(nextYaw);
 	}
+
 
 	private void alignYaw()
 	{
