@@ -149,7 +149,6 @@ public class CompassCameraControlPlugin extends Plugin
 		client.setCameraYawTarget(nextYaw);
 	}
 
-
 	private void alignYaw()
 	{
 		int dNorth = Math.min(
