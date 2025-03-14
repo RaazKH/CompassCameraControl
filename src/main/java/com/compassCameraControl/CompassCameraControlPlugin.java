@@ -3,6 +3,7 @@ package com.compassCameraControl;
 import com.google.inject.Provides;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.awt.event.KeyEvent;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
@@ -13,14 +14,16 @@ import net.runelite.api.SoundEffectID;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.input.KeyListener;
+import net.runelite.client.input.KeyManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 
 @Slf4j
 @PluginDescriptor(
-	name = "Compass Camera Control",
-	description = "Expands compass functionality",
-	tags = {"camera, compass, control, navigation, usability, convenience"}
+		name = "Compass Camera Control",
+		description = "Expands compass functionality",
+		tags = {"camera, compass, control, navigation, usability, convenience"}
 )
 public class CompassCameraControlPlugin extends Plugin
 {
@@ -30,16 +33,20 @@ public class CompassCameraControlPlugin extends Plugin
 	@Inject
 	private CompassCameraControlConfig config;
 
+	@Inject
+	private KeyManager keyManager;
+
+
 	private static final int NORTH_YAW = 0;
 	private static final int SOUTH_YAW = 1024;
 	private static final int EAST_YAW = 1536;
 	private static final int WEST_YAW = 512;
 
 	private static final Map<Character, Integer> directionMap = Map.of(
-		'N', NORTH_YAW,
-		'S', SOUTH_YAW,
-		'E', EAST_YAW,
-		'W', WEST_YAW
+			'N', NORTH_YAW,
+			'S', SOUTH_YAW,
+			'E', EAST_YAW,
+			'W', WEST_YAW
 	);
 
 	private static final String SNAP_CARDINAL = "Snap Cardinal";
@@ -70,10 +77,10 @@ public class CompassCameraControlPlugin extends Plugin
 			}
 
 			client.getMenu()
-				.createMenuEntry(-1)
-				.setType(MenuAction.RUNELITE_HIGH_PRIORITY)
-				.setOption(newOption)
-				.onClick(this::onCompassAction);
+					.createMenuEntry(-1)
+					.setType(MenuAction.RUNELITE_HIGH_PRIORITY)
+					.setOption(newOption)
+					.onClick(this::onCompassAction);
 		}
 	}
 
@@ -104,13 +111,13 @@ public class CompassCameraControlPlugin extends Plugin
 	{
 		// Retain only "N", "E", "S", "W"
 		return config.cycleOrder().toUpperCase().replaceAll("[^NESW]", "")
-			.chars()
-			.distinct()
-			.limit(4)
-			.collect(StringBuilder::new,
-				StringBuilder::appendCodePoint,
-				StringBuilder::append)
-			.toString();
+				.chars()
+				.distinct()
+				.limit(4)
+				.collect(StringBuilder::new,
+						StringBuilder::appendCodePoint,
+						StringBuilder::append)
+				.toString();
 	}
 
 	private void cycleYaw()
@@ -152,8 +159,8 @@ public class CompassCameraControlPlugin extends Plugin
 	private void alignYaw()
 	{
 		int dNorth = Math.min(
-			Math.abs(client.getCameraYawTarget() - NORTH_YAW), // north-east quadrant
-			Math.abs(client.getCameraYawTarget() - (NORTH_YAW + 2048)) // north-west quadrant
+				Math.abs(client.getCameraYawTarget() - NORTH_YAW), // north-east quadrant
+				Math.abs(client.getCameraYawTarget() - (NORTH_YAW + 2048)) // north-west quadrant
 		);
 		int closestYaw = NORTH_YAW;
 		int closestYawDistance = dNorth;
@@ -179,5 +186,40 @@ public class CompassCameraControlPlugin extends Plugin
 		}
 
 		client.setCameraYawTarget(closestYaw);
+	}
+
+	private final KeyListener keyListener = new KeyListener() {
+		@Override
+		public void keyTyped(KeyEvent e) {
+
+		}
+
+		@Override
+		public void keyPressed(KeyEvent event) {
+			if (event.getKeyCode() == config.lookNorthKey().getKeyCode()) {
+				client.setCameraYawTarget(NORTH_YAW);
+			} else if (event.getKeyCode() == config.lookSouthKey().getKeyCode()) {
+				client.setCameraYawTarget(SOUTH_YAW);
+			} else if (event.getKeyCode() == config.lookEastKey().getKeyCode()) {
+				client.setCameraYawTarget(EAST_YAW);
+			} else if (event.getKeyCode() == config.lookWestKey().getKeyCode()) {
+				client.setCameraYawTarget(WEST_YAW);
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent event) {
+			// No action needed on key release
+		}
+	};
+
+	@Override
+	protected void startUp() throws Exception {
+		keyManager.registerKeyListener(keyListener);
+	}
+
+	@Override
+	protected void shutDown() throws Exception {
+		keyManager.unregisterKeyListener(keyListener);
 	}
 }
