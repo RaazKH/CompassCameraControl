@@ -1,11 +1,7 @@
 package com.compassCameraControl;
 
-import net.runelite.client.config.Config;
-import net.runelite.client.config.ConfigGroup;
-import net.runelite.client.config.ConfigItem;
-import net.runelite.client.config.Keybind;
+import net.runelite.client.config.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 @ConfigGroup("compasscameracontrol")
 public interface CompassCameraControlConfig extends Config
@@ -48,43 +44,57 @@ public interface CompassCameraControlConfig extends Config
 		return ShiftMode.OFF;
 	}
 
-	@ConfigItem(
-			keyName = "lookNorthKey",
-			name = "Look North Key",
-			description = "Keybind for Look North",
-			position = 4
+	@ConfigSection(
+		name = "Keybindings",
+		position = 4,
+		closedByDefault = true,
+		description = "Settings for snapping the camera to cardinal directions<br/>" +
+			"To prevent these keys from appearing in chat<br/>" +
+			"Enable the \"Key Remapping\" plugin (included with RuneLite)"
 	)
-	default Keybind lookNorthKey() {
-		return new Keybind(KeyEvent.VK_UP, 0);
+	String cardinalKeybindingSnap = "cardinalKeybindingSnap";
+
+	@ConfigItem(
+		keyName = "lookNorthKey",
+		name = "Look North Key",
+		description = "Face camera North on key press",
+		position = 5,
+		section = cardinalKeybindingSnap
+	)
+	default ModifierlessKeybind lookNorthKey() {
+		return new ModifierlessKeybind(KeyEvent.VK_UNDEFINED, 0);
 	}
 
 	@ConfigItem(
-			keyName = "lookSouthKey",
-			name = "Look South Key",
-			description = "Keybind for Look South",
-			position = 5
+		keyName = "lookSouthKey",
+		name = "Look South Key",
+		description = "Face camera South on key press",
+		position = 6,
+		section = cardinalKeybindingSnap
 	)
-	default Keybind lookSouthKey() {
-		return new Keybind(KeyEvent.VK_DOWN, 0);
+	default ModifierlessKeybind lookSouthKey() {
+		return new ModifierlessKeybind(KeyEvent.VK_UNDEFINED, 0);
 	}
 
 	@ConfigItem(
-			keyName = "lookEastKey",
-			name = "Look East Key",
-			description = "Keybind for Look East",
-			position = 6
+		keyName = "lookEastKey",
+		name = "Look East Key",
+		description = "Face camera East on key press",
+		position = 7,
+		section = cardinalKeybindingSnap
 	)
-	default Keybind lookEastKey() {
-		return new Keybind(KeyEvent.VK_RIGHT, 0);
+	default ModifierlessKeybind lookEastKey() {
+		return new ModifierlessKeybind(KeyEvent.VK_UNDEFINED, 0);
 	}
 
 	@ConfigItem(
-			keyName = "lookWestKey",
-			name = "Look West Key",
-			description = "Keybind for Look West",
-			position = 7
+		keyName = "lookWestKey",
+		name = "Look West Key",
+		description = "Face camera West on key press",
+		position = 8,
+		section = cardinalKeybindingSnap
 	)
-	default Keybind lookWestKey() {
-		return new Keybind(KeyEvent.VK_LEFT, 0);
+	default ModifierlessKeybind lookWestKey() {
+		return new ModifierlessKeybind(KeyEvent.VK_UNDEFINED, 0);
 	}
 }
