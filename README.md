@@ -39,6 +39,18 @@ You can configure how the plugin responds to clicks on the compass:
 - **On Shift**: Only works when Shift is held down.
 - **Off Shift**: Works only when Shift is not held down.
 
+
+### Keybindings
+
+You can set up keyboard shortcuts to instantly snap the camera to any cardinal direction:
+
+- **Look North Key**: Face camera North when pressed
+- **Look South Key**: Face camera South when pressed
+- **Look East Key**: Face camera East when pressed
+- **Look West Key**: Face camera West when pressed
+
+To prevent these key presses from appearing in the chat, enable the "Key Remapping" plugin (included with RuneLite).
+
 ## Issues and Feedback
 
 If you encounter any bugs, have suggestions for improvements, or would like to give feedback, please feel free to <a href="https://github.com/RaazKH/CompassCameraControl/issues">submit an issue</a>.
