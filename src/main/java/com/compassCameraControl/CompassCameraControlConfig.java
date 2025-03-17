@@ -1,8 +1,7 @@
 package com.compassCameraControl;
 
-import net.runelite.client.config.Config;
-import net.runelite.client.config.ConfigGroup;
-import net.runelite.client.config.ConfigItem;
+import net.runelite.client.config.*;
+import java.awt.event.KeyEvent;
 
 @ConfigGroup("compasscameracontrol")
 public interface CompassCameraControlConfig extends Config
@@ -43,5 +42,59 @@ public interface CompassCameraControlConfig extends Config
 	default ShiftMode shiftClickMode()
 	{
 		return ShiftMode.OFF;
+	}
+
+	@ConfigSection(
+		name = "Keybindings",
+		position = 4,
+		closedByDefault = true,
+		description = "Settings for snapping the camera to cardinal directions<br/>" +
+			"To prevent these keys from appearing in chat<br/>" +
+			"Enable the \"Key Remapping\" plugin (included with RuneLite)"
+	)
+	String cardinalKeybindingSnap = "cardinalKeybindingSnap";
+
+	@ConfigItem(
+		keyName = "lookNorthKey",
+		name = "Look North Key",
+		description = "Face camera North on key press",
+		position = 5,
+		section = cardinalKeybindingSnap
+	)
+	default ModifierlessKeybind lookNorthKey() {
+		return new ModifierlessKeybind(KeyEvent.VK_UNDEFINED, 0);
+	}
+
+	@ConfigItem(
+		keyName = "lookSouthKey",
+		name = "Look South Key",
+		description = "Face camera South on key press",
+		position = 6,
+		section = cardinalKeybindingSnap
+	)
+	default ModifierlessKeybind lookSouthKey() {
+		return new ModifierlessKeybind(KeyEvent.VK_UNDEFINED, 0);
+	}
+
+	@ConfigItem(
+		keyName = "lookEastKey",
+		name = "Look East Key",
+		description = "Face camera East on key press",
+		position = 7,
+		section = cardinalKeybindingSnap
+	)
+	default ModifierlessKeybind lookEastKey() {
+		return new ModifierlessKeybind(KeyEvent.VK_UNDEFINED, 0);
+	}
+
+	@ConfigItem(
+		keyName = "lookWestKey",
+		name = "Look West Key",
+		description = "Face camera West on key press",
+		position = 8,
+		section = cardinalKeybindingSnap
+	)
+	default ModifierlessKeybind lookWestKey() {
+		return new ModifierlessKeybind(KeyEvent.VK_UNDEFINED, 0);
 	}
 }
