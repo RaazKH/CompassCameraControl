@@ -42,14 +42,14 @@ You can configure how the plugin responds to clicks on the compass:
 
 ### Keybindings
 
-You can set up keyboard shortcuts to instantly snap the camera to any cardinal direction:
+You can set up single key shortcuts for quick camera control. To prevent key presses from appearing in the chat, enable the "Key Remapping" plugin (included with RuneLite).
 
+- **Snap to Closest**: Snap camera to the closest cardinal direction when pressed
+- **Cycle Cardinal**: Cycle through your custom cycle order of directions when pressed
 - **Look North Key**: Face camera North when pressed
 - **Look South Key**: Face camera South when pressed
 - **Look East Key**: Face camera East when pressed
 - **Look West Key**: Face camera West when pressed
-
-To prevent these key presses from appearing in the chat, enable the "Key Remapping" plugin (included with RuneLite).
 
 ## Issues and Feedback
 
