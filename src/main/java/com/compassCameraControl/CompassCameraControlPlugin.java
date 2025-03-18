@@ -196,7 +196,11 @@ public class CompassCameraControlPlugin extends Plugin
 
 		@Override
 		public void keyPressed(KeyEvent event) {
-			if (event.getKeyCode() == config.lookNorthKey().getKeyCode()) {
+			if (event.getKeyCode() == config.snapCloseKey().getKeyCode()) {
+				alignYaw();
+			} else if (event.getKeyCode() == config.cycleCardinalKey().getKeyCode()) {
+				cycleYaw();
+			} else if (event.getKeyCode() == config.lookNorthKey().getKeyCode()) {
 				client.setCameraYawTarget(NORTH_YAW);
 			} else if (event.getKeyCode() == config.lookSouthKey().getKeyCode()) {
 				client.setCameraYawTarget(SOUTH_YAW);
