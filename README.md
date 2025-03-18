@@ -39,6 +39,7 @@ You can configure how the plugin responds to clicks on the compass:
 - **On Shift**: Only works when Shift is held down.
 - **Off Shift**: Works only when Shift is not held down.
 
+---
 
 ### Keybindings
 
@@ -50,6 +51,8 @@ You can set up single key shortcuts for quick camera control. To prevent key pre
 - **Look South Key**: Face camera South when pressed
 - **Look East Key**: Face camera East when pressed
 - **Look West Key**: Face camera West when pressed
+
+---
 
 ## Issues and Feedback
 
