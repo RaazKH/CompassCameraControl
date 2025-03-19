@@ -59,4 +59,4 @@ If you encounter any bugs, have suggestions for improvements, or would like to g
 
 #### Contributors
 
-Thanks to [LlemonDuck](https://github.com/LlemonDuck) and [insizhen](https://github.com/insizhen) for their code contributions.
+Thanks to [LlemonDuck](https://github.com/LlemonDuck) and [insizhen](https://github.com/insizhen) for their valuable code contributions.

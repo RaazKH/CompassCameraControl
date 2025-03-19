@@ -18,8 +18,6 @@ import net.runelite.client.input.KeyListener;
 import net.runelite.client.input.KeyManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Slf4j
 @PluginDescriptor(
@@ -29,7 +27,6 @@ import org.slf4j.LoggerFactory;
 )
 public class CompassCameraControlPlugin extends Plugin
 {
-	private static final Logger log = LoggerFactory.getLogger(CompassCameraControlPlugin.class);
 	@Inject
 	private Client client;
 
@@ -204,23 +201,17 @@ public class CompassCameraControlPlugin extends Plugin
 
 			if (config.snapCloseKey().matches(event)) {
 				alignYaw();
-			}
-			else if (config.cycleCardinalKey().matches(event)) {
+			} else if (config.cycleCardinalKey().matches(event)) {
 				cycleYaw();
-			}
-			else if (config.lookNorthKey().matches(event)) {
+			} else if (config.lookNorthKey().matches(event)) {
 				client.setCameraYawTarget(NORTH_YAW);
-			}
-			else if (config.lookSouthKey().matches(event)) {
+			} else if (config.lookSouthKey().matches(event)) {
 				client.setCameraYawTarget(SOUTH_YAW);
-			}
-			else if (config.lookEastKey().matches(event)) {
-				client.setCameraYawTarget(EAST_YAW);
-			}
+			} else if (config.lookEastKey().matches(event)) {
+				client.setCameraYawTarget(EAST_YAW);}
 			else if (config.lookWestKey().matches(event)) {
 				client.setCameraYawTarget(WEST_YAW);
-			}
-			else {
+			} else {
 				handledEvent = false;
 			}
 
