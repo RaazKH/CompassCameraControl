@@ -18,6 +18,8 @@ import net.runelite.client.input.KeyListener;
 import net.runelite.client.input.KeyManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Slf4j
 @PluginDescriptor(
@@ -27,6 +29,7 @@ import net.runelite.client.plugins.PluginDescriptor;
 )
 public class CompassCameraControlPlugin extends Plugin
 {
+	private static final Logger log = LoggerFactory.getLogger(CompassCameraControlPlugin.class);
 	@Inject
 	private Client client;
 
@@ -190,30 +193,40 @@ public class CompassCameraControlPlugin extends Plugin
 
 	private final KeyListener keyListener = new KeyListener() {
 		@Override
-		public void keyTyped(KeyEvent e) {
+		public void keyTyped(KeyEvent event) { }
 
-		}
+		@Override
+		public void keyReleased(KeyEvent event) { }
 
 		@Override
 		public void keyPressed(KeyEvent event) {
-			if (event.getKeyCode() == config.snapCloseKey().getKeyCode()) {
+			boolean handledEvent = true;
+
+			if (config.snapCloseKey().matches(event)) {
 				alignYaw();
-			} else if (event.getKeyCode() == config.cycleCardinalKey().getKeyCode()) {
+			}
+			else if (config.cycleCardinalKey().matches(event)) {
 				cycleYaw();
-			} else if (event.getKeyCode() == config.lookNorthKey().getKeyCode()) {
+			}
+			else if (config.lookNorthKey().matches(event)) {
 				client.setCameraYawTarget(NORTH_YAW);
-			} else if (event.getKeyCode() == config.lookSouthKey().getKeyCode()) {
+			}
+			else if (config.lookSouthKey().matches(event)) {
 				client.setCameraYawTarget(SOUTH_YAW);
-			} else if (event.getKeyCode() == config.lookEastKey().getKeyCode()) {
+			}
+			else if (config.lookEastKey().matches(event)) {
 				client.setCameraYawTarget(EAST_YAW);
-			} else if (event.getKeyCode() == config.lookWestKey().getKeyCode()) {
+			}
+			else if (config.lookWestKey().matches(event)) {
 				client.setCameraYawTarget(WEST_YAW);
 			}
-		}
+			else {
+				handledEvent = false;
+			}
 
-		@Override
-		public void keyReleased(KeyEvent event) {
-			// No action needed on key release
+			if (handledEvent) {
+				event.consume();
+			}
 		}
 	};
 
