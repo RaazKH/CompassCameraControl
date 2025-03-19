@@ -1,6 +1,10 @@
 package com.compassCameraControl;
 
-import net.runelite.client.config.*;
+import net.runelite.client.config.Config;
+import net.runelite.client.config.ConfigGroup;
+import net.runelite.client.config.ConfigItem;
+import net.runelite.client.config.ConfigSection;
+import net.runelite.client.config.Keybind;
 import java.awt.event.KeyEvent;
 
 @ConfigGroup("compasscameracontrol")
@@ -61,8 +65,8 @@ public interface CompassCameraControlConfig extends Config
 			position = 5,
 			section = cardinalKeybindingSnap
 	)
-	default ModifierlessKeybind snapCloseKey() {
-		return new ModifierlessKeybind(KeyEvent.VK_UNDEFINED, 0);
+	default Keybind snapCloseKey() {
+		return new Keybind(KeyEvent.VK_UNDEFINED, 0);
 	}
 
 	@ConfigItem(
@@ -72,8 +76,8 @@ public interface CompassCameraControlConfig extends Config
 			position = 6,
 			section = cardinalKeybindingSnap
 	)
-	default ModifierlessKeybind cycleCardinalKey() {
-		return new ModifierlessKeybind(KeyEvent.VK_UNDEFINED, 0);
+	default Keybind cycleCardinalKey() {
+		return new Keybind(KeyEvent.VK_UNDEFINED, 0);
 	}
 
 	@ConfigItem(
@@ -83,8 +87,8 @@ public interface CompassCameraControlConfig extends Config
 		position = 7,
 		section = cardinalKeybindingSnap
 	)
-	default ModifierlessKeybind lookNorthKey() {
-		return new ModifierlessKeybind(KeyEvent.VK_UNDEFINED, 0);
+	default Keybind lookNorthKey() {
+		return new Keybind(KeyEvent.VK_UNDEFINED, 0);
 	}
 
 	@ConfigItem(
@@ -94,8 +98,8 @@ public interface CompassCameraControlConfig extends Config
 		position = 8,
 		section = cardinalKeybindingSnap
 	)
-	default ModifierlessKeybind lookSouthKey() {
-		return new ModifierlessKeybind(KeyEvent.VK_UNDEFINED, 0);
+	default Keybind lookSouthKey() {
+		return new Keybind(KeyEvent.VK_UNDEFINED, 0);
 	}
 
 	@ConfigItem(
@@ -105,8 +109,8 @@ public interface CompassCameraControlConfig extends Config
 		position = 9,
 		section = cardinalKeybindingSnap
 	)
-	default ModifierlessKeybind lookEastKey() {
-		return new ModifierlessKeybind(KeyEvent.VK_UNDEFINED, 0);
+	default Keybind lookEastKey() {
+		return new Keybind(KeyEvent.VK_UNDEFINED, 0);
 	}
 
 	@ConfigItem(
@@ -116,7 +120,7 @@ public interface CompassCameraControlConfig extends Config
 		position = 10,
 		section = cardinalKeybindingSnap
 	)
-	default ModifierlessKeybind lookWestKey() {
-		return new ModifierlessKeybind(KeyEvent.VK_UNDEFINED, 0);
+	default Keybind lookWestKey() {
+		return new Keybind(KeyEvent.VK_UNDEFINED, 0);
 	}
 }

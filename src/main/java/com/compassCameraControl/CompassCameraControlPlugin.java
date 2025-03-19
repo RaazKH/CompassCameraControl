@@ -190,30 +190,34 @@ public class CompassCameraControlPlugin extends Plugin
 
 	private final KeyListener keyListener = new KeyListener() {
 		@Override
-		public void keyTyped(KeyEvent e) {
+		public void keyTyped(KeyEvent event) { }
 
-		}
+		@Override
+		public void keyReleased(KeyEvent event) { }
 
 		@Override
 		public void keyPressed(KeyEvent event) {
-			if (event.getKeyCode() == config.snapCloseKey().getKeyCode()) {
-				alignYaw();
-			} else if (event.getKeyCode() == config.cycleCardinalKey().getKeyCode()) {
-				cycleYaw();
-			} else if (event.getKeyCode() == config.lookNorthKey().getKeyCode()) {
-				client.setCameraYawTarget(NORTH_YAW);
-			} else if (event.getKeyCode() == config.lookSouthKey().getKeyCode()) {
-				client.setCameraYawTarget(SOUTH_YAW);
-			} else if (event.getKeyCode() == config.lookEastKey().getKeyCode()) {
-				client.setCameraYawTarget(EAST_YAW);
-			} else if (event.getKeyCode() == config.lookWestKey().getKeyCode()) {
-				client.setCameraYawTarget(WEST_YAW);
-			}
-		}
+			boolean handledEvent = true;
 
-		@Override
-		public void keyReleased(KeyEvent event) {
-			// No action needed on key release
+			if (config.snapCloseKey().matches(event)) {
+				alignYaw();
+			} else if (config.cycleCardinalKey().matches(event)) {
+				cycleYaw();
+			} else if (config.lookNorthKey().matches(event)) {
+				client.setCameraYawTarget(NORTH_YAW);
+			} else if (config.lookSouthKey().matches(event)) {
+				client.setCameraYawTarget(SOUTH_YAW);
+			} else if (config.lookEastKey().matches(event)) {
+				client.setCameraYawTarget(EAST_YAW);}
+			else if (config.lookWestKey().matches(event)) {
+				client.setCameraYawTarget(WEST_YAW);
+			} else {
+				handledEvent = false;
+			}
+
+			if (handledEvent) {
+				event.consume();
+			}
 		}
 	};
 

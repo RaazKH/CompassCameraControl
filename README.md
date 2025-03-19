@@ -1,13 +1,13 @@
 # Compass Camera Control
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/RaazKH/CompassCameraControl?include_prereleases&logo=github)
 
-A RuneLite plugin that allows you to control the camera direction by simply clicking the compass orb, cycling through cardinal directions or snapping to the closest one.
+A RuneLite plugin that allows you to control the camera direction by clicking the compass orb or using customizable keybindings.
 
-## Configuration
+## Compass Orb Control
 
-This plugin is simple and has two modes:
+You can cycle through cardinal directions or snap to the closest one by clicking on the compass orb.
 
-#### Cycle Mode (default)
+### Cycle Mode (default)
 
 1. If facing North, the camera will rotate to South.
 2. If facing South, it will rotate to East.
@@ -16,10 +16,30 @@ This plugin is simple and has two modes:
 
 The process repeats when clicking the compass orb.
 
-#### Snap to Closest
+### Snap to Closest Mode
 
 When clicking the compass, the camera will snap to the closest cardinal direction.
 Useful for spinning the camera manually, then aligning to the grid.
+
+
+### Shift-Click Option
+
+You can configure how the plugin responds to clicks on the compass:
+
+- **Off**: Always active, ignoring the Shift key.
+- **On Shift**: Only works when Shift is held down.
+- **Off Shift**: Works only when Shift is not held down.
+
+## Keybindings
+
+You can set up shortcuts for quick camera control. To prevent shortcuts from appearing in the chat, enable the "Key Remapping" plugin (included with RuneLite).
+
+- **Snap to Closest**: Snap camera to the closest cardinal direction when pressed
+- **Cycle Cardinal**: Cycle through your custom cycle order of directions when pressed
+- **Look North Key**: Face camera North when pressed
+- **Look South Key**: Face camera South when pressed
+- **Look East Key**: Face camera East when pressed
+- **Look West Key**: Face camera West when pressed
 
 ---
 
@@ -31,29 +51,12 @@ This field is **not** case-sensitive. Non-unique cardinal directions will be ign
 
 ---
 
-### Shift-Click Option
-
-You can configure how the plugin responds to clicks on the compass:
-
-- **Off**: Always active, ignoring the Shift key.
-- **On Shift**: Only works when Shift is held down.
-- **Off Shift**: Works only when Shift is not held down.
-
----
-
-### Keybindings
-
-You can set up single key shortcuts for quick camera control. To prevent key presses from appearing in the chat, enable the "Key Remapping" plugin (included with RuneLite).
-
-- **Snap to Closest**: Snap camera to the closest cardinal direction when pressed
-- **Cycle Cardinal**: Cycle through your custom cycle order of directions when pressed
-- **Look North Key**: Face camera North when pressed
-- **Look South Key**: Face camera South when pressed
-- **Look East Key**: Face camera East when pressed
-- **Look West Key**: Face camera West when pressed
-
----
-
-## Issues and Feedback
+#### Issues and Feedback
 
 If you encounter any bugs, have suggestions for improvements, or would like to give feedback, please feel free to <a href="https://github.com/RaazKH/CompassCameraControl/issues">submit an issue</a>.
+
+---
+
+#### Contributors
+
+Thanks to [LlemonDuck](https://github.com/LlemonDuck) and [insizhen](https://github.com/insizhen) for their valuable code contributions.
