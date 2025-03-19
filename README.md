@@ -1,7 +1,7 @@
 # Compass Camera Control
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/RaazKH/CompassCameraControl?include_prereleases&logo=github)
 
-A RuneLite plugin that allows you to control the camera direction by clicking the compass orb or using customizable keybindings.
+A RuneLite plugin that allows you to control the camera direction by either clicking the compass orb or using customizable keybindings.
 
 ## Compass Orb Control
 
