@@ -38,9 +38,13 @@ public class CompassCameraControlPlugin extends Plugin
 
 
 	private static final int NORTH_YAW = 0;
-	private static final int SOUTH_YAW = 1024;
-	private static final int EAST_YAW = 1536;
+	private static final int NORTHWEST_YAW = 256;
 	private static final int WEST_YAW = 512;
+	private static final int SOUTHWEST_YAW = 768;
+	private static final int SOUTH_YAW = 1024;
+	private static final int SOUTHEAST_YAW= 1280;
+	private static final int EAST_YAW = 1536;
+	private static final int NORTHEAST_YAW = 1792;
 
 	private static final Map<Character, Integer> directionMap = Map.of(
 		'N', NORTH_YAW,
@@ -49,6 +53,7 @@ public class CompassCameraControlPlugin extends Plugin
 		'W', WEST_YAW
 	);
 
+	private static final String SNAP_FACING = "Snap Facing";
 	private static final String SNAP_CARDINAL = "Snap Cardinal";
 	private static final String CYCLE_CARDINAL = "Cycle Cardinal";
 
@@ -66,6 +71,10 @@ public class CompassCameraControlPlugin extends Plugin
 			String newOption;
 			switch (config.controlMode())
 			{
+				case SNAP_TO_FACING:
+					newOption = SNAP_FACING;
+					break;
+
 				case SNAP_TO_CLOSEST:
 					newOption = SNAP_CARDINAL;
 					break;
@@ -88,6 +97,11 @@ public class CompassCameraControlPlugin extends Plugin
 	{
 		switch (event.getOption())
 		{
+			case SNAP_FACING:
+				facingYaw();
+				client.playSoundEffect(SoundEffectID.UI_BOOP);
+				break;
+
 			case SNAP_CARDINAL:
 				alignYaw();
 				client.playSoundEffect(SoundEffectID.UI_BOOP);
@@ -188,6 +202,21 @@ public class CompassCameraControlPlugin extends Plugin
 		client.setCameraYawTarget(closestYaw);
 	}
 
+	private void facingYaw()
+	{
+		if (client.getLocalPlayer() == null)
+		{
+			return;
+		}
+
+		int playerOrientation = client.getLocalPlayer().getOrientation();
+		int direction = playerOrientation / 256;
+
+		int[] yaws = {SOUTH_YAW, SOUTHWEST_YAW, WEST_YAW, NORTHWEST_YAW, NORTH_YAW, NORTHEAST_YAW, EAST_YAW, SOUTHEAST_YAW};
+
+		client.setCameraYawTarget(yaws[direction]);
+	}
+
 	private final KeyListener keyListener = new KeyListener() {
 		@Override
 		public void keyTyped(KeyEvent event) { }
@@ -198,8 +227,9 @@ public class CompassCameraControlPlugin extends Plugin
 		@Override
 		public void keyPressed(KeyEvent event) {
 			boolean handledEvent = true;
-
-			if (config.snapCloseKey().matches(event)) {
+			if (config.snapFacingKey().matches(event)) {
+				facingYaw();
+			} else if (config.snapCloseKey().matches(event)) {
 				alignYaw();
 			} else if (config.cycleCardinalKey().matches(event)) {
 				cycleYaw();

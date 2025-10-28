@@ -15,7 +15,8 @@ public interface CompassCameraControlConfig extends Config
 		name = "Mode",
 		position = 1,
 		description = "Cycle: North -> South -> East -> West (default)<br/>" +
-			"Snap to Closest: Snaps the camera to the nearest cardinal direction"
+			"Snap to Closest: Snaps the camera to the nearest cardinal direction<br/>" +
+			"Snap to Facing: Snaps the camera to the player's facing direction"
 	)
 	default ControlMode controlMode()
 	{
@@ -59,10 +60,21 @@ public interface CompassCameraControlConfig extends Config
 	String cardinalKeybindingSnap = "cardinalKeybindingSnap";
 
 	@ConfigItem(
+			keyName = "snapFacingKey",
+			name = "Snap Facing",
+			description = "Snaps the camera to the player's facing direction on key press",
+			position = 5,
+			section = cardinalKeybindingSnap
+	)
+	default Keybind snapFacingKey() {
+		return new Keybind(KeyEvent.VK_UNDEFINED, 0);
+	}
+
+	@ConfigItem(
 			keyName = "snapCloseKey",
 			name = "Snap to Closest",
 			description = "Snaps the camera to the nearest cardinal direction on key press",
-			position = 5,
+			position = 6,
 			section = cardinalKeybindingSnap
 	)
 	default Keybind snapCloseKey() {
@@ -73,7 +85,7 @@ public interface CompassCameraControlConfig extends Config
 			keyName = "cycleCardinalKey",
 			name = "Cycle Cardinal",
 			description = "Cycles through cardinal directions on key press",
-			position = 6,
+			position = 7,
 			section = cardinalKeybindingSnap
 	)
 	default Keybind cycleCardinalKey() {
@@ -84,7 +96,7 @@ public interface CompassCameraControlConfig extends Config
 		keyName = "lookNorthKey",
 		name = "Look North Key",
 		description = "Face camera North on key press",
-		position = 7,
+		position = 8,
 		section = cardinalKeybindingSnap
 	)
 	default Keybind lookNorthKey() {
@@ -95,7 +107,7 @@ public interface CompassCameraControlConfig extends Config
 		keyName = "lookSouthKey",
 		name = "Look South Key",
 		description = "Face camera South on key press",
-		position = 8,
+		position = 9,
 		section = cardinalKeybindingSnap
 	)
 	default Keybind lookSouthKey() {
@@ -106,7 +118,7 @@ public interface CompassCameraControlConfig extends Config
 		keyName = "lookEastKey",
 		name = "Look East Key",
 		description = "Face camera East on key press",
-		position = 9,
+		position = 10,
 		section = cardinalKeybindingSnap
 	)
 	default Keybind lookEastKey() {
@@ -117,7 +129,7 @@ public interface CompassCameraControlConfig extends Config
 		keyName = "lookWestKey",
 		name = "Look West Key",
 		description = "Face camera West on key press",
-		position = 10,
+		position = 11,
 		section = cardinalKeybindingSnap
 	)
 	default Keybind lookWestKey() {
