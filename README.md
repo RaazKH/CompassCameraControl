@@ -19,7 +19,6 @@ Useful for spinning the camera manually, then aligning to the grid.
 
 ### Snap to Facing Mode
 When clicking the compass, the camera will snap to face the same direction as your character.
-Works with all 8 directions (N, NE, E, SE, S, SW, W, NW).
 
 ### Shift-Click Option
 You can configure how the plugin responds to clicks on the compass:
