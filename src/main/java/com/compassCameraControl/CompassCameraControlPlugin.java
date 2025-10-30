@@ -38,13 +38,9 @@ public class CompassCameraControlPlugin extends Plugin
 
 
 	private static final int NORTH_YAW = 0;
-	private static final int NORTHWEST_YAW = 256;
 	private static final int WEST_YAW = 512;
-	private static final int SOUTHWEST_YAW = 768;
 	private static final int SOUTH_YAW = 1024;
-	private static final int SOUTHEAST_YAW= 1280;
 	private static final int EAST_YAW = 1536;
-	private static final int NORTHEAST_YAW = 1792;
 
 	private static final Map<Character, Integer> directionMap = Map.of(
 		'N', NORTH_YAW,
@@ -210,11 +206,15 @@ public class CompassCameraControlPlugin extends Plugin
 		}
 
 		int playerOrientation = client.getLocalPlayer().getOrientation();
-		int direction = playerOrientation / 256;
+		int targetYaw;
 
-		int[] yaws = {SOUTH_YAW, SOUTHWEST_YAW, WEST_YAW, NORTHWEST_YAW, NORTH_YAW, NORTHEAST_YAW, EAST_YAW, SOUTHEAST_YAW};
+		if (playerOrientation <= 1024) {
+			targetYaw = 512 * 2 - playerOrientation;
+		} else {
+			targetYaw = 1536 * 2 - playerOrientation;
+		}
 
-		client.setCameraYawTarget(yaws[direction]);
+		client.setCameraYawTarget(targetYaw);
 	}
 
 	private final KeyListener keyListener = new KeyListener() {
