@@ -37,6 +37,8 @@ You can set up shortcuts for quick camera control. To prevent shortcuts from app
 - **Look South Key**: Face camera South when pressed
 - **Look East Key**: Face camera East when pressed
 - **Look West Key**: Face camera West when pressed
+- **Rotate West Key**: Rotates camera West, relative to current position (Default 90°)
+- **Rotate East Key**: Rotates camera East, relative to current position (Default 90°)
 
 ---
 ### Custom Cycle Order

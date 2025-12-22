@@ -6,11 +6,7 @@ import javax.inject.Singleton;
 import java.awt.event.KeyEvent;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.Client;
-import net.runelite.api.KeyCode;
-import net.runelite.api.MenuAction;
-import net.runelite.api.MenuEntry;
-import net.runelite.api.SoundEffectID;
+import net.runelite.api.*;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -217,6 +213,39 @@ public class CompassCameraControlPlugin extends Plugin
 		client.setCameraYawTarget(targetYaw);
 	}
 
+	private int degreesToYaw(int degrees) {
+		return (int) Math.round(degrees * 2048.0 / 360.0);
+	}
+
+	private void rotateWestYaw()
+	{
+		int currentYaw = client.getCameraYaw();
+		int userInputDegree = config.rotateDegree();
+		int shift = degreesToYaw(userInputDegree);
+
+		int targetYaw = currentYaw + shift;
+		// Wraps yaw into camera range [0,2048)
+		targetYaw &= 2047;
+
+		System.out.println("New Yaw Pos:" + targetYaw);
+		client.setCameraYawTarget(targetYaw);
+	}
+	
+	private void rotateEastYaw()
+	{
+		int currentYaw = client.getCameraYaw();
+		int userInputDegree = config.rotateDegree();
+		int shift = degreesToYaw(userInputDegree);
+
+		System.out.println("Shift: " + shift);
+		int targetYaw = currentYaw - shift;
+		// Wraps yaw into camera range [0,2048)
+		targetYaw &= 2047;
+		
+		System.out.println("New Yaw Pos:" + targetYaw);
+		client.setCameraYawTarget(targetYaw);
+	}
+	
 	private final KeyListener keyListener = new KeyListener() {
 		@Override
 		public void keyTyped(KeyEvent event) { }
@@ -241,6 +270,10 @@ public class CompassCameraControlPlugin extends Plugin
 				client.setCameraYawTarget(EAST_YAW);}
 			else if (config.lookWestKey().matches(event)) {
 				client.setCameraYawTarget(WEST_YAW);
+			} else if (config.rotateWestKey().matches(event)) {
+				rotateWestYaw();
+			} else if (config.rotateEastKey().matches(event)) {
+				rotateEastYaw();
 			} else {
 				handledEvent = false;
 			}
