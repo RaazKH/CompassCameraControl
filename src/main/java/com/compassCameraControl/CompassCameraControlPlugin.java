@@ -6,7 +6,11 @@ import javax.inject.Singleton;
 import java.awt.event.KeyEvent;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.*;
+import net.runelite.api.Client;
+import net.runelite.api.KeyCode;
+import net.runelite.api.MenuAction;
+import net.runelite.api.MenuEntry;
+import net.runelite.api.SoundEffectID;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -227,7 +231,6 @@ public class CompassCameraControlPlugin extends Plugin
 		// Wraps yaw into camera range [0,2048)
 		targetYaw &= 2047;
 
-		System.out.println("New Yaw Pos:" + targetYaw);
 		client.setCameraYawTarget(targetYaw);
 	}
 	
@@ -237,12 +240,10 @@ public class CompassCameraControlPlugin extends Plugin
 		int userInputDegree = config.rotateDegree();
 		int shift = degreesToYaw(userInputDegree);
 
-		System.out.println("Shift: " + shift);
 		int targetYaw = currentYaw - shift;
 		// Wraps yaw into camera range [0,2048)
 		targetYaw &= 2047;
-		
-		System.out.println("New Yaw Pos:" + targetYaw);
+
 		client.setCameraYawTarget(targetYaw);
 	}
 	
