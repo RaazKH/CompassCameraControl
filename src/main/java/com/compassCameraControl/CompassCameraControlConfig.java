@@ -135,4 +135,33 @@ public interface CompassCameraControlConfig extends Config
 	default Keybind lookWestKey() {
 		return new Keybind(KeyEvent.VK_UNDEFINED, 0);
 	}
+
+
+
+	@ConfigItem(
+		keyName = "rotateWestKey",
+		name = "Rotate West Key",
+		description = "Rotate camera West, based on user configuration (Default 90°)",
+		position = 12,
+		section = cardinalKeybindingSnap
+	)
+	default Keybind rotateWestKey() { return new Keybind(KeyEvent.VK_UNDEFINED, 0);}
+
+	@ConfigItem(
+			keyName = "rotateEastKey",
+			name = "Rotate East Key",
+			description = "Rotate camera East, based on user configuration (Default 90°)",
+			position = 13,
+			section = cardinalKeybindingSnap
+	)
+	default Keybind rotateEastKey() { return new Keybind(KeyEvent.VK_UNDEFINED, 0);}
+
+	@ConfigItem(
+			keyName = "rotateDegree",
+			name = "Rotation Degree",
+			description = "How many degrees to rotate",
+			position = 14,
+			section = cardinalKeybindingSnap
+	)
+	default int rotateDegree(){ return 90; }
 }

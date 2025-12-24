@@ -217,6 +217,36 @@ public class CompassCameraControlPlugin extends Plugin
 		client.setCameraYawTarget(targetYaw);
 	}
 
+	private int degreesToYaw(int degrees) {
+		return (int) Math.round(degrees * 2048.0 / 360.0);
+	}
+
+	private void rotateWestYaw()
+	{
+		int currentYaw = client.getCameraYaw();
+		int userInputDegree = config.rotateDegree();
+		int shift = degreesToYaw(userInputDegree);
+
+		int targetYaw = currentYaw + shift;
+		// Wraps yaw into camera range [0,2048)
+		targetYaw &= 2047;
+
+		client.setCameraYawTarget(targetYaw);
+	}
+	
+	private void rotateEastYaw()
+	{
+		int currentYaw = client.getCameraYaw();
+		int userInputDegree = config.rotateDegree();
+		int shift = degreesToYaw(userInputDegree);
+
+		int targetYaw = currentYaw - shift;
+		// Wraps yaw into camera range [0,2048)
+		targetYaw &= 2047;
+
+		client.setCameraYawTarget(targetYaw);
+	}
+	
 	private final KeyListener keyListener = new KeyListener() {
 		@Override
 		public void keyTyped(KeyEvent event) { }
@@ -241,6 +271,10 @@ public class CompassCameraControlPlugin extends Plugin
 				client.setCameraYawTarget(EAST_YAW);}
 			else if (config.lookWestKey().matches(event)) {
 				client.setCameraYawTarget(WEST_YAW);
+			} else if (config.rotateWestKey().matches(event)) {
+				rotateWestYaw();
+			} else if (config.rotateEastKey().matches(event)) {
+				rotateEastYaw();
 			} else {
 				handledEvent = false;
 			}
