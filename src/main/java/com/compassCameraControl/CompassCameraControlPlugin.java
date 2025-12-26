@@ -270,8 +270,8 @@ public class CompassCameraControlPlugin extends Plugin
 			} else if (config.lookSouthKey().matches(event)) {
 				client.setCameraYawTarget(SOUTH_YAW);
 			} else if (config.lookEastKey().matches(event)) {
-				client.setCameraYawTarget(EAST_YAW);}
-			else if (config.lookWestKey().matches(event)) {
+				client.setCameraYawTarget(EAST_YAW);
+			} else if (config.lookWestKey().matches(event)) {
 				client.setCameraYawTarget(WEST_YAW);
 			} else if (config.rotateFlipKey().matches(event)) {
 				rotateYaw("Flip");
