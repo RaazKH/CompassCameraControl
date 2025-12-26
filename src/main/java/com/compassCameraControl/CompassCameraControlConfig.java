@@ -136,32 +136,53 @@ public interface CompassCameraControlConfig extends Config
 		return new Keybind(KeyEvent.VK_UNDEFINED, 0);
 	}
 
-
-
 	@ConfigItem(
-		keyName = "rotateWestKey",
-		name = "Rotate West Key",
-		description = "Rotate camera West, based on user configuration (Default 90°)",
-		position = 12,
-		section = cardinalKeybindingSnap
-	)
-	default Keybind rotateWestKey() { return new Keybind(KeyEvent.VK_UNDEFINED, 0);}
-
-	@ConfigItem(
-			keyName = "rotateEastKey",
-			name = "Rotate East Key",
-			description = "Rotate camera East, based on user configuration (Default 90°)",
-			position = 13,
+			keyName = "rotateFlipKey",
+			name = "Rotate 180° Key",
+			description = "Rotates the camera to opposite side (always 180°)",
+			position = 12,
 			section = cardinalKeybindingSnap
 	)
-	default Keybind rotateEastKey() { return new Keybind(KeyEvent.VK_UNDEFINED, 0);}
+	default Keybind rotateFlipKey() { return new Keybind(KeyEvent.VK_UNDEFINED, 0);}
+
+
+	@ConfigItem(
+		keyName = "rotateClockwiseKey",
+		name = "Rotate Clockwise Key",
+		description = "Rotate camera a user defined number of degrees clockwise, based on Rotation Degree",
+		position = 13,
+		section = cardinalKeybindingSnap
+	)
+	default Keybind rotateClockwiseKey() { return new Keybind(KeyEvent.VK_UNDEFINED, 0);}
+
+	@ConfigItem(
+			keyName = "rotateCounterclockwiseKey",
+			name = "Rotate Counterclockwise Key",
+			description = "Rotate camera a user defined number of degrees counterclockwise, based on Rotation Degree",
+			position = 14,
+			section = cardinalKeybindingSnap
+	)
+	default Keybind rotateCounterclockwiseKey() { return new Keybind(KeyEvent.VK_UNDEFINED, 0);}
+
+	@ConfigItem(
+			keyName = "rotateAfterSnap",
+			name = "Rotate After Snap",
+			description = "Snap to the closest cardinal direction before rotation, applies to all rotation keybindings",
+			position = 15
+	)
+	default boolean rotateAfterSnap()
+	{
+		return false;
+	}
 
 	@ConfigItem(
 			keyName = "rotateDegree",
 			name = "Rotation Degree",
-			description = "How many degrees to rotate",
-			position = 14,
-			section = cardinalKeybindingSnap
+			description = "Set rotation value for clockwise and counterclockwise rotation keybindings",
+			position = 16
 	)
-	default int rotateDegree(){ return 90; }
+	default int rotateDegree()
+	{
+		return 90;
+	}
 }

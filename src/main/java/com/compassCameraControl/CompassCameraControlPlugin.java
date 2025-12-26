@@ -221,26 +221,28 @@ public class CompassCameraControlPlugin extends Plugin
 		return (int) Math.round(degrees * 2048.0 / 360.0);
 	}
 
-	private void rotateWestYaw()
+	private void rotateYaw(String s)
 	{
+		if (config.rotateAfterSnap()) {
+			alignYaw();
+		}
+
 		int currentYaw = client.getCameraYaw();
 		int userInputDegree = config.rotateDegree();
 		int shift = degreesToYaw(userInputDegree);
 
-		int targetYaw = currentYaw + shift;
-		// Wraps yaw into camera range [0,2048)
-		targetYaw &= 2047;
+		if(s.equals("Flip")) {
+			shift = degreesToYaw(180);
+		}
 
-		client.setCameraYawTarget(targetYaw);
-	}
-	
-	private void rotateEastYaw()
-	{
-		int currentYaw = client.getCameraYaw();
-		int userInputDegree = config.rotateDegree();
-		int shift = degreesToYaw(userInputDegree);
+		int targetYaw;
+		if(s.equals("Clockwise")){
+			targetYaw = currentYaw + shift;
+		}
+		else {
+			targetYaw = currentYaw - shift;
+		}
 
-		int targetYaw = currentYaw - shift;
 		// Wraps yaw into camera range [0,2048)
 		targetYaw &= 2047;
 
@@ -271,10 +273,12 @@ public class CompassCameraControlPlugin extends Plugin
 				client.setCameraYawTarget(EAST_YAW);}
 			else if (config.lookWestKey().matches(event)) {
 				client.setCameraYawTarget(WEST_YAW);
-			} else if (config.rotateWestKey().matches(event)) {
-				rotateWestYaw();
-			} else if (config.rotateEastKey().matches(event)) {
-				rotateEastYaw();
+			} else if (config.rotateFlipKey().matches(event)) {
+				rotateYaw("Flip");
+			} else if (config.rotateClockwiseKey().matches(event)) {
+				rotateYaw("Clockwise");
+			} else if (config.rotateCounterclockwiseKey().matches(event)) {
+				rotateYaw("Counterclockwise");
 			} else {
 				handledEvent = false;
 			}
