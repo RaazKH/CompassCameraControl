@@ -38,8 +38,8 @@ You can set up shortcuts for quick camera control. To prevent shortcuts from app
 - **Look East Key**: Face camera East when pressed
 - **Look West Key**: Face camera West when pressed
 - **Rotate 180°**: Rotates the camera to opposite side (always 180°)
-- **Rotate Clockwise**: Rotates camera clockwise (default 90°)
-- **Rotate Counterclockwise**: Rotates camera counterclockwise (default 90°)
+- **Rotate Clockwise**: Rotates camera clockwise
+- **Rotate Counterclockwise**: Rotates camera counterclockwise
 
 ### Keybind Options
 - **Rotate After Snap**: Snap to the closest cardinal direction before rotation, applies to all rotation keybindings

@@ -223,19 +223,16 @@ public class CompassCameraControlPlugin extends Plugin
 
 	private void rotateYaw(String s)
 	{
+		int currentYaw = client.getCameraYaw();
+		int shift = s.equals("Flip") ? degreesToYaw(180) : degreesToYaw(config.rotateDegree());
+		int targetYaw;
+
 		if (config.rotateAfterSnap()) {
 			alignYaw();
+			// Above updates the yaw target in this tick, so use the target rather than the current yaw
+			currentYaw = client.getCameraYawTarget();
 		}
 
-		int currentYaw = client.getCameraYaw();
-		int userInputDegree = config.rotateDegree();
-		int shift = degreesToYaw(userInputDegree);
-
-		if(s.equals("Flip")) {
-			shift = degreesToYaw(180);
-		}
-
-		int targetYaw;
 		if(s.equals("Clockwise")){
 			targetYaw = currentYaw + shift;
 		}
