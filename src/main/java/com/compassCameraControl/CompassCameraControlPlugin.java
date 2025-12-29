@@ -221,26 +221,25 @@ public class CompassCameraControlPlugin extends Plugin
 		return (int) Math.round(degrees * 2048.0 / 360.0);
 	}
 
-	private void rotateWestYaw()
+	private void rotateYaw(String s)
 	{
 		int currentYaw = client.getCameraYaw();
-		int userInputDegree = config.rotateDegree();
-		int shift = degreesToYaw(userInputDegree);
+		int shift = s.equals("Flip") ? degreesToYaw(180) : degreesToYaw(config.rotateDegree());
+		int targetYaw;
 
-		int targetYaw = currentYaw + shift;
-		// Wraps yaw into camera range [0,2048)
-		targetYaw &= 2047;
+		if (config.rotateAfterSnap()) {
+			alignYaw();
+			// Above updates the yaw target in this tick, so use the target rather than the current yaw
+			currentYaw = client.getCameraYawTarget();
+		}
 
-		client.setCameraYawTarget(targetYaw);
-	}
-	
-	private void rotateEastYaw()
-	{
-		int currentYaw = client.getCameraYaw();
-		int userInputDegree = config.rotateDegree();
-		int shift = degreesToYaw(userInputDegree);
+		if(s.equals("Clockwise")){
+			targetYaw = currentYaw + shift;
+		}
+		else {
+			targetYaw = currentYaw - shift;
+		}
 
-		int targetYaw = currentYaw - shift;
 		// Wraps yaw into camera range [0,2048)
 		targetYaw &= 2047;
 
@@ -268,13 +267,15 @@ public class CompassCameraControlPlugin extends Plugin
 			} else if (config.lookSouthKey().matches(event)) {
 				client.setCameraYawTarget(SOUTH_YAW);
 			} else if (config.lookEastKey().matches(event)) {
-				client.setCameraYawTarget(EAST_YAW);}
-			else if (config.lookWestKey().matches(event)) {
+				client.setCameraYawTarget(EAST_YAW);
+			} else if (config.lookWestKey().matches(event)) {
 				client.setCameraYawTarget(WEST_YAW);
-			} else if (config.rotateWestKey().matches(event)) {
-				rotateWestYaw();
-			} else if (config.rotateEastKey().matches(event)) {
-				rotateEastYaw();
+			} else if (config.rotateFlipKey().matches(event)) {
+				rotateYaw("Flip");
+			} else if (config.rotateClockwiseKey().matches(event)) {
+				rotateYaw("Clockwise");
+			} else if (config.rotateCounterclockwiseKey().matches(event)) {
+				rotateYaw("Counterclockwise");
 			} else {
 				handledEvent = false;
 			}

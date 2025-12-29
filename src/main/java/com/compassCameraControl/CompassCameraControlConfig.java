@@ -60,33 +60,33 @@ public interface CompassCameraControlConfig extends Config
 	String cardinalKeybindingSnap = "cardinalKeybindingSnap";
 
 	@ConfigItem(
-			keyName = "snapFacingKey",
-			name = "Snap Facing",
-			description = "Snaps the camera to the player's facing direction on key press",
-			position = 5,
-			section = cardinalKeybindingSnap
+		keyName = "snapFacingKey",
+		name = "Snap Facing",
+		description = "Snaps the camera to the player's facing direction on key press",
+		position = 5,
+		section = cardinalKeybindingSnap
 	)
 	default Keybind snapFacingKey() {
 		return new Keybind(KeyEvent.VK_UNDEFINED, 0);
 	}
 
 	@ConfigItem(
-			keyName = "snapCloseKey",
-			name = "Snap to Closest",
-			description = "Snaps the camera to the nearest cardinal direction on key press",
-			position = 6,
-			section = cardinalKeybindingSnap
+		keyName = "snapCloseKey",
+		name = "Snap to Closest",
+		description = "Snaps the camera to the nearest cardinal direction on key press",
+		position = 6,
+		section = cardinalKeybindingSnap
 	)
 	default Keybind snapCloseKey() {
 		return new Keybind(KeyEvent.VK_UNDEFINED, 0);
 	}
 
 	@ConfigItem(
-			keyName = "cycleCardinalKey",
-			name = "Cycle Cardinal",
-			description = "Cycles through cardinal directions on key press",
-			position = 7,
-			section = cardinalKeybindingSnap
+		keyName = "cycleCardinalKey",
+		name = "Cycle Cardinal",
+		description = "Cycles through cardinal directions on key press",
+		position = 7,
+		section = cardinalKeybindingSnap
 	)
 	default Keybind cycleCardinalKey() {
 		return new Keybind(KeyEvent.VK_UNDEFINED, 0);
@@ -136,32 +136,56 @@ public interface CompassCameraControlConfig extends Config
 		return new Keybind(KeyEvent.VK_UNDEFINED, 0);
 	}
 
-
-
 	@ConfigItem(
-		keyName = "rotateWestKey",
-		name = "Rotate West Key",
-		description = "Rotate camera West, based on user configuration (Default 90°)",
+		keyName = "rotateFlipKey",
+		name = "Rotate 180° Key",
+		description = "Rotates the camera to opposite side (always 180°)",
 		position = 12,
 		section = cardinalKeybindingSnap
 	)
-	default Keybind rotateWestKey() { return new Keybind(KeyEvent.VK_UNDEFINED, 0);}
+	default Keybind rotateFlipKey() { return new Keybind(KeyEvent.VK_UNDEFINED, 0);}
+
 
 	@ConfigItem(
-			keyName = "rotateEastKey",
-			name = "Rotate East Key",
-			description = "Rotate camera East, based on user configuration (Default 90°)",
-			position = 13,
-			section = cardinalKeybindingSnap
+		keyName = "rotateClockwiseKey",
+		name = "Rotate Clockwise Key",
+		position = 13,
+		section = cardinalKeybindingSnap,
+		description = "Rotate camera a user defined number of degrees clockwise<br/>" +
+				"Based on Rotation Degree"
 	)
-	default Keybind rotateEastKey() { return new Keybind(KeyEvent.VK_UNDEFINED, 0);}
+	default Keybind rotateClockwiseKey() { return new Keybind(KeyEvent.VK_UNDEFINED, 0);}
 
 	@ConfigItem(
-			keyName = "rotateDegree",
-			name = "Rotation Degree",
-			description = "How many degrees to rotate",
-			position = 14,
-			section = cardinalKeybindingSnap
+		keyName = "rotateCounterclockwiseKey",
+		name = "Rotate Counterclockwise Key",
+		position = 14,
+		section = cardinalKeybindingSnap,
+		description = "Rotate camera a user defined number of degrees counterclockwise<br/>" +
+				"Based on Rotation Degree"
 	)
-	default int rotateDegree(){ return 90; }
+	default Keybind rotateCounterclockwiseKey() { return new Keybind(KeyEvent.VK_UNDEFINED, 0);}
+
+	@ConfigItem(
+		keyName = "rotateAfterSnap",
+		name = "Rotate After Snap",
+		position = 15,
+		description = "Snap to the closest cardinal direction before rotation<br/>" +
+				"Applies to all rotation keybindings"
+	)
+	default boolean rotateAfterSnap()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "rotateDegree",
+		name = "Rotation Degree",
+		position = 16,
+		description = "Rotation value for clockwise and counterclockwise rotation keybindings"
+	)
+	default int rotateDegree()
+	{
+		return 90;
+	}
 }

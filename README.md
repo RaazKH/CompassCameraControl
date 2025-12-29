@@ -37,7 +37,13 @@ You can set up shortcuts for quick camera control. To prevent shortcuts from app
 - **Look South Key**: Face camera South when pressed
 - **Look East Key**: Face camera East when pressed
 - **Look West Key**: Face camera West when pressed
+- **Rotate 180°**: Rotates the camera to opposite side (always 180°)
+- **Rotate Clockwise**: Rotates camera clockwise
+- **Rotate Counterclockwise**: Rotates camera counterclockwise
 
+### Keybind Options
+- **Rotate After Snap**: Snap to the closest cardinal direction before rotation, applies to all rotation keybindings
+- **Rotation Value**: Set rotation value for clockwise and counterclockwise rotation keybindings
 ---
 ### Custom Cycle Order
 You can specify a custom order for cycling through directions. For example, if you prefer to cycle between North and South, you can set the cycle order to `N,S`. Only `N`, `S`, `W`, and `E` are valid characters for this field, all other characters will be ignored.
@@ -50,4 +56,4 @@ If you encounter any bugs, have suggestions for improvements, or would like to g
 
 ---
 #### Contributors
-Thanks to [LlemonDuck](https://github.com/LlemonDuck) and [insizhen](https://github.com/insizhen) for their valuable code contributions.
+Thanks to [LlemonDuck](https://github.com/LlemonDuck), [insizhen](https://github.com/insizhen), and [Scarcy](https://github.com/Scarcy) for their valuable code contributions.
