@@ -16,7 +16,8 @@ public interface CompassCameraControlConfig extends Config
 		position = 1,
 		description = "Cycle: North -> South -> East -> West (default)<br/>" +
 			"Snap to Closest: Snaps the camera to the nearest cardinal direction<br/>" +
-			"Snap to Facing: Snaps the camera to the player's facing direction"
+			"Snap to Facing: Snaps the camera to the player's facing direction<br/>" +
+			"Snap then Cycle: Snaps to cardinal within cycle order, then cycle"
 	)
 	default ControlMode controlMode()
 	{
@@ -93,10 +94,22 @@ public interface CompassCameraControlConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "snapThenCycleKey",
+		name = "Snap Then Cycle",
+		position = 8,
+		section = cardinalKeybindingSnap,
+		description = "Snap to closest allowed direction(within cycle order)<br/>" +
+			"Cycle if on an allowed direction"
+	)
+	default Keybind snapThenCycleKey() {
+		return new Keybind(KeyEvent.VK_UNDEFINED, 0);
+	}
+
+	@ConfigItem(
 		keyName = "lookNorthKey",
 		name = "Look North Key",
 		description = "Face camera North on key press",
-		position = 8,
+		position = 9,
 		section = cardinalKeybindingSnap
 	)
 	default Keybind lookNorthKey() {
@@ -107,7 +120,7 @@ public interface CompassCameraControlConfig extends Config
 		keyName = "lookSouthKey",
 		name = "Look South Key",
 		description = "Face camera South on key press",
-		position = 9,
+		position = 10,
 		section = cardinalKeybindingSnap
 	)
 	default Keybind lookSouthKey() {
@@ -118,7 +131,7 @@ public interface CompassCameraControlConfig extends Config
 		keyName = "lookEastKey",
 		name = "Look East Key",
 		description = "Face camera East on key press",
-		position = 10,
+		position = 11,
 		section = cardinalKeybindingSnap
 	)
 	default Keybind lookEastKey() {
@@ -129,7 +142,7 @@ public interface CompassCameraControlConfig extends Config
 		keyName = "lookWestKey",
 		name = "Look West Key",
 		description = "Face camera West on key press",
-		position = 11,
+		position = 12,
 		section = cardinalKeybindingSnap
 	)
 	default Keybind lookWestKey() {
@@ -140,7 +153,7 @@ public interface CompassCameraControlConfig extends Config
 		keyName = "rotateFlipKey",
 		name = "Rotate 180° Key",
 		description = "Rotates the camera to opposite side (always 180°)",
-		position = 12,
+		position = 13,
 		section = cardinalKeybindingSnap
 	)
 	default Keybind rotateFlipKey() { return new Keybind(KeyEvent.VK_UNDEFINED, 0);}
@@ -149,7 +162,7 @@ public interface CompassCameraControlConfig extends Config
 	@ConfigItem(
 		keyName = "rotateClockwiseKey",
 		name = "Rotate Clockwise Key",
-		position = 13,
+		position = 14,
 		section = cardinalKeybindingSnap,
 		description = "Rotate camera a user defined number of degrees clockwise<br/>" +
 				"Based on Rotation Degree"
@@ -159,7 +172,7 @@ public interface CompassCameraControlConfig extends Config
 	@ConfigItem(
 		keyName = "rotateCounterclockwiseKey",
 		name = "Rotate Counterclockwise Key",
-		position = 14,
+		position = 15,
 		section = cardinalKeybindingSnap,
 		description = "Rotate camera a user defined number of degrees counterclockwise<br/>" +
 				"Based on Rotation Degree"
@@ -169,7 +182,7 @@ public interface CompassCameraControlConfig extends Config
 	@ConfigItem(
 		keyName = "rotateAfterSnap",
 		name = "Rotate After Snap",
-		position = 15,
+		position = 16,
 		description = "Snap to the closest cardinal direction before rotation<br/>" +
 				"Applies to all rotation keybindings"
 	)
@@ -181,7 +194,7 @@ public interface CompassCameraControlConfig extends Config
 	@ConfigItem(
 		keyName = "rotateDegree",
 		name = "Rotation Degree",
-		position = 16,
+		position = 17,
 		description = "Rotation value for clockwise and counterclockwise rotation keybindings"
 	)
 	default int rotateDegree()

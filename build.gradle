@@ -27,7 +27,7 @@ dependencies {
 }
 
 group = 'com.compassCameraControl'
-version = '1.2.2-SNAPSHOT'
+version = '1.2.3-SNAPSHOT'
 
 tasks.withType(JavaCompile).configureEach {
 	options.encoding = 'UTF-8'

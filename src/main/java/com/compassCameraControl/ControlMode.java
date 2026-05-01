@@ -9,6 +9,7 @@ public enum ControlMode
 	CYCLE("Cycle"),
 	SNAP_TO_CLOSEST("Snap to Closest"),
 	SNAP_TO_FACING("Snap to Facing"),
+	SNAP_THEN_CYCLE("Snap then Cycle"),
 	;
 
 	private final String name;
