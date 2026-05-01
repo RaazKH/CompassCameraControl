@@ -37,7 +37,7 @@ You can set up shortcuts for quick camera control. To prevent shortcuts from app
 - **Snap to Facing**: Snap camera to your character's facing direction when pressed
 - **Snap to Closest**: Snap camera to the closest cardinal direction when pressed
 - **Cycle Cardinal**: Cycle through your custom cycle order of directions when pressed
-- **Snap Then Cycle**: Snap to closest when not on cardinal, otherwise cycle when pressed
+- **Snap Then Cycle**: Snap to closest allowed direction; if snapped, cycle when pressed
 - **Look North Key**: Face camera North when pressed
 - **Look South Key**: Face camera South when pressed
 - **Look East Key**: Face camera East when pressed

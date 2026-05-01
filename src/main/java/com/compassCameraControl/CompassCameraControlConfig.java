@@ -95,11 +95,11 @@ public interface CompassCameraControlConfig extends Config
 
 	@ConfigItem(
 		keyName = "snapThenCycleKey",
-		name = "Snap Then Cycle",
+		name = "Snap then Cycle",
 		position = 8,
 		section = cardinalKeybindingSnap,
-		description = "Snap to closest allowed direction(within cycle order)<br/>" +
-			"Cycle if on an allowed direction"
+		description = "Snap to the closest allowed direction (within cycle order)<br/>" +
+			"Cycle if already on an allowed direction"
 	)
 	default Keybind snapThenCycleKey() {
 		return new Keybind(KeyEvent.VK_UNDEFINED, 0);
