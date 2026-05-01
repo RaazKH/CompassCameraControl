@@ -178,7 +178,8 @@ public class CompassCameraControlPlugin extends Plugin
 		alignYaw(new int[]{ NORTH_YAW, SOUTH_YAW, EAST_YAW, WEST_YAW });
 	}
 
-	private void alignYaw(int[] yaws) {
+	private void alignYaw(int[] yaws)
+	{
 		int currentYaw = client.getCameraYawTarget();
 		int closestYaw = yaws[0];
 		int diff = Math.abs(currentYaw - yaws[0]);
