@@ -52,17 +52,18 @@ public class CompassCameraControlPlugin extends Plugin
 	private static final String SNAP_FACING = "Snap Facing";
 	private static final String SNAP_CARDINAL = "Snap Cardinal";
 	private static final String CYCLE_CARDINAL = "Cycle Cardinal";
+	private static final String SNAP_THEN_CYCLE = "Snap Then Cycle";
 
 	@Subscribe
 	public void onMenuEntryAdded(MenuEntryAdded event)
 	{
 		if (event.getOption().equals("Look North"))
 		{
-			if (config.shiftClickMode() != ShiftMode.OFF &&
-					((config.shiftClickMode() == ShiftMode.ONSHIFT && !client.isKeyPressed(KeyCode.KC_SHIFT)) ||
-							(config.shiftClickMode() == ShiftMode.OFFSHIFT && client.isKeyPressed(KeyCode.KC_SHIFT))))
-			{ return; }
-
+			if (config.shiftClickMode() != ShiftMode.OFF) {
+				boolean shiftHeld = client.isKeyPressed(KeyCode.KC_SHIFT);
+				if (config.shiftClickMode() == ShiftMode.ONSHIFT && !shiftHeld) return;
+				if (config.shiftClickMode() == ShiftMode.OFFSHIFT && shiftHeld) return;
+			}
 
 			String newOption;
 			switch (config.controlMode())
@@ -73,6 +74,10 @@ public class CompassCameraControlPlugin extends Plugin
 
 				case SNAP_TO_CLOSEST:
 					newOption = SNAP_CARDINAL;
+					break;
+
+				case SNAP_THEN_CYCLE:
+					newOption = SNAP_THEN_CYCLE;
 					break;
 
 				case CYCLE:
@@ -103,6 +108,11 @@ public class CompassCameraControlPlugin extends Plugin
 				client.playSoundEffect(SoundEffectID.UI_BOOP);
 				break;
 
+			case SNAP_THEN_CYCLE:
+				hybridSnapThenCycle();
+				client.playSoundEffect(SoundEffectID.UI_BOOP);
+				break;
+
 			case CYCLE_CARDINAL:
 				cycleYaw();
 				client.playSoundEffect(SoundEffectID.UI_BOOP);
@@ -117,10 +127,10 @@ public class CompassCameraControlPlugin extends Plugin
 		return configManager.getConfig(CompassCameraControlConfig.class);
 	}
 
-	private String getValidatedCycleOrder()
+	private int[] cycleOrderToYaws()
 	{
 		// Retain only "N", "E", "S", "W"
-		return config.cycleOrder().toUpperCase().replaceAll("[^NESW]", "")
+		String cycleOrder = config.cycleOrder().toUpperCase().replaceAll("[^NESW]", "")
 			.chars()
 			.distinct()
 			.limit(4)
@@ -128,37 +138,33 @@ public class CompassCameraControlPlugin extends Plugin
 				StringBuilder::appendCodePoint,
 				StringBuilder::append)
 			.toString();
+
+		if (cycleOrder.isEmpty())
+		{
+			return new int[]{ NORTH_YAW, SOUTH_YAW, EAST_YAW, WEST_YAW };
+		}
+
+		return cycleOrder.chars()
+			.map(c -> directionMap.get((char) c))
+			.toArray();
 	}
 
 	private void cycleYaw()
 	{
-		String cycleOrder = getValidatedCycleOrder();
-		int[] yawOrder = new int[cycleOrder.length()];
+		// Overloaded method so cycleOrderToYaws isn't called twice when using hybridSnapThenCycle()
+		cycleYaw(cycleOrderToYaws());
+	}
 
-		int count = 0;
-		for (char direction : cycleOrder.toCharArray())
-		{
-			Integer yaw = directionMap.get(direction);
-			if (yaw != null)
-			{
-				yawOrder[count++] = yaw;
-			}
-		}
-
-		if (count == 0)
-		{
-			yawOrder = new int[]{ NORTH_YAW, SOUTH_YAW, EAST_YAW, WEST_YAW };
-			count = 4;
-		}
-
+	private void cycleYaw(int[] yawOrder)
+	{
 		int currentYaw = client.getCameraYaw();
 		int nextYaw = yawOrder[0];
 
-		for (int i = 0; i < count; i++)
+		for (int i = 0; i < yawOrder.length; i++)
 		{
 			if (yawOrder[i] == currentYaw)
 			{
-				nextYaw = yawOrder[(i + 1) % count];
+				nextYaw = yawOrder[(i + 1) % yawOrder.length];
 				break;
 			}
 		}
@@ -168,34 +174,53 @@ public class CompassCameraControlPlugin extends Plugin
 
 	private void alignYaw()
 	{
-		int dNorth = Math.min(
-			Math.abs(client.getCameraYawTarget() - NORTH_YAW), // north-east quadrant
-			Math.abs(client.getCameraYawTarget() - (NORTH_YAW + 2048)) // north-west quadrant
-		);
-		int closestYaw = NORTH_YAW;
-		int closestYawDistance = dNorth;
+		// Overloaded method so vanilla alignYaw users maintain the same functionality
+		alignYaw(new int[]{ NORTH_YAW, SOUTH_YAW, EAST_YAW, WEST_YAW });
+	}
 
-		int dSouth = Math.abs(client.getCameraYawTarget() - SOUTH_YAW);
-		if (dSouth < closestYawDistance)
-		{
-			closestYaw = SOUTH_YAW;
-			closestYawDistance = dSouth;
-		}
+	private void alignYaw(int[] yaws)
+	{
+		int currentYaw = client.getCameraYawTarget();
+		int closestYaw = yaws[0];
+		int diff = Math.abs(currentYaw - yaws[0]);
+		int closestDistance = Math.min(diff, 2048 - diff);
 
-		int dEast = Math.abs(client.getCameraYawTarget() - EAST_YAW);
-		if (dEast < closestYawDistance)
-		{
-			closestYaw = EAST_YAW;
-			closestYawDistance = dEast;
-		}
-
-		int dWest = Math.abs(client.getCameraYawTarget() - WEST_YAW);
-		if (dWest < closestYawDistance)
-		{
-			closestYaw = WEST_YAW;
+		for (int i = 1; i < yaws.length; i++) {
+			diff = Math.abs(currentYaw - yaws[i]);
+			int distance = Math.min(diff, 2048 - diff);
+			if (distance < closestDistance) {
+				closestYaw = yaws[i];
+				closestDistance = distance;
+			}
 		}
 
 		client.setCameraYawTarget(closestYaw);
+	}
+
+	private void hybridSnapThenCycle()
+	{
+		int currentYaw = client.getCameraYaw();
+		int[] allowedYaws = cycleOrderToYaws();
+
+		// Check if currentYaw is in the allowed cardinal set
+		boolean isOnAllowedCardinal = false;
+		for (int yaw : allowedYaws)
+		{
+			if (yaw == currentYaw)
+			{
+				isOnAllowedCardinal = true;
+				break;
+			}
+		}
+
+		if (isOnAllowedCardinal)
+		{
+			cycleYaw(allowedYaws);
+		}
+		else
+		{
+			alignYaw(allowedYaws);
+		}
 	}
 
 	private void facingYaw()
@@ -217,7 +242,7 @@ public class CompassCameraControlPlugin extends Plugin
 		client.setCameraYawTarget(targetYaw);
 	}
 
-	private int degreesToYaw(int degrees) {
+	private static int degreesToYaw(int degrees) {
 		return (int) Math.round(degrees * 2048.0 / 360.0);
 	}
 
@@ -262,6 +287,8 @@ public class CompassCameraControlPlugin extends Plugin
 				alignYaw();
 			} else if (config.cycleCardinalKey().matches(event)) {
 				cycleYaw();
+			} else if (config.snapThenCycleKey().matches(event)) {
+				hybridSnapThenCycle();
 			} else if (config.lookNorthKey().matches(event)) {
 				client.setCameraYawTarget(NORTH_YAW);
 			} else if (config.lookSouthKey().matches(event)) {
