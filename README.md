@@ -22,8 +22,10 @@ Useful for spinning the camera manually, then aligning to the grid.
 When clicking the compass, the camera will snap to face the same direction as your character.
 
 ### Snap Then Cycle Mode
-When clicking the compass, the camera will snap to the closest **allowed** direction (from cycle order field), and if you're already on an allowed direction, it will cycle through them.
-For example, with cycle order "N,S": First click from South-East snaps to South. Next click cycles to North. Next click cycles back to South.
+When clicking the compass, the camera will snap to the closest **allowed** direction (from cycle order field).
+If you click again within 2 seconds while already on an allowed direction, it will cycle through allowed directions.
+If you wait longer than 2 seconds, the next click re-snaps instead of cycling.
+For example, with cycle order "N,S": First click from South-East snaps to South. A quick second click cycles to North. If you wait a few seconds, a click re-centers instead of cycling.
 
 ### Shift-Click Option
 You can configure how the plugin responds to clicks on the compass:
@@ -37,7 +39,7 @@ You can set up shortcuts for quick camera control. To prevent shortcuts from app
 - **Snap to Facing**: Snap camera to your character's facing direction when pressed
 - **Snap to Closest**: Snap camera to the closest cardinal direction when pressed
 - **Cycle Cardinal**: Cycle through your custom cycle order of directions when pressed
-- **Snap Then Cycle**: Snap to closest allowed direction; if snapped, cycle when pressed
+- **Snap Then Cycle**: Snap to closest allowed direction; quick re-press (within 2 seconds) cycles
 - **Look North Key**: Face camera North when pressed
 - **Look South Key**: Face camera South when pressed
 - **Look East Key**: Face camera East when pressed

@@ -53,6 +53,9 @@ public class CompassCameraControlPlugin extends Plugin
 	private static final String SNAP_CARDINAL = "Snap Cardinal";
 	private static final String CYCLE_CARDINAL = "Cycle Cardinal";
 	private static final String SNAP_THEN_CYCLE = "Snap Then Cycle";
+	private static final long HYBRID_CYCLE_TIMEOUT_MS = 2000L;
+
+	private long lastHybridClickTimeMs;
 
 	@Subscribe
 	public void onMenuEntryAdded(MenuEntryAdded event)
@@ -199,6 +202,7 @@ public class CompassCameraControlPlugin extends Plugin
 
 	private void hybridSnapThenCycle()
 	{
+		long nowMs = System.currentTimeMillis();
 		int currentYaw = client.getCameraYaw();
 		int[] allowedYaws = cycleOrderToYaws();
 
@@ -213,7 +217,7 @@ public class CompassCameraControlPlugin extends Plugin
 			}
 		}
 
-		if (isOnAllowedCardinal)
+		if (isOnAllowedCardinal && (nowMs - lastHybridClickTimeMs) <= HYBRID_CYCLE_TIMEOUT_MS)
 		{
 			cycleYaw(allowedYaws);
 		}
@@ -221,6 +225,8 @@ public class CompassCameraControlPlugin extends Plugin
 		{
 			alignYaw(allowedYaws);
 		}
+
+		lastHybridClickTimeMs = nowMs;
 	}
 
 	private void facingYaw()

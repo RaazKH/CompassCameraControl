@@ -17,7 +17,7 @@ public interface CompassCameraControlConfig extends Config
 		description = "Cycle: North -> South -> East -> West (default)<br/>" +
 			"Snap to Closest: Snaps the camera to the nearest cardinal direction<br/>" +
 			"Snap to Facing: Snaps the camera to the player's facing direction<br/>" +
-			"Snap then Cycle: Snaps to cardinal within cycle order, then cycle"
+			"Snap then Cycle: Snaps to cardinal; re-click within 2 seconds to cycle"
 	)
 	default ControlMode controlMode()
 	{
@@ -99,7 +99,7 @@ public interface CompassCameraControlConfig extends Config
 		position = 8,
 		section = cardinalKeybindingSnap,
 		description = "Snap to the closest allowed direction (within cycle order)<br/>" +
-			"Cycle if already on an allowed direction"
+			"Quick re-press within 2 seconds cycles if already on an allowed direction"
 	)
 	default Keybind snapThenCycleKey() {
 		return new Keybind(KeyEvent.VK_UNDEFINED, 0);
