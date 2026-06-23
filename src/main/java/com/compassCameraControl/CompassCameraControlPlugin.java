@@ -38,9 +38,9 @@ public class CompassCameraControlPlugin extends Plugin
 
 
 	private static final int NORTH_YAW = 0;
-	private static final int WEST_YAW = 512;
-	private static final int SOUTH_YAW = 1024;
-	private static final int EAST_YAW = 1536;
+	private static final int WEST_YAW = 4096;
+	private static final int SOUTH_YAW = 8192;
+	private static final int EAST_YAW = 12288;
 
 	private static final Map<Character, Integer> directionMap = Map.of(
 		'N', NORTH_YAW,
@@ -186,11 +186,11 @@ public class CompassCameraControlPlugin extends Plugin
 		int currentYaw = client.getCameraYawTarget();
 		int closestYaw = yaws[0];
 		int diff = Math.abs(currentYaw - yaws[0]);
-		int closestDistance = Math.min(diff, 2048 - diff);
+		int closestDistance = Math.min(diff, 16384 - diff);
 
 		for (int i = 1; i < yaws.length; i++) {
 			diff = Math.abs(currentYaw - yaws[i]);
-			int distance = Math.min(diff, 2048 - diff);
+			int distance = Math.min(diff, 16384 - diff);
 			if (distance < closestDistance) {
 				closestYaw = yaws[i];
 				closestDistance = distance;
@@ -236,20 +236,21 @@ public class CompassCameraControlPlugin extends Plugin
 			return;
 		}
 
-		int playerOrientation = client.getLocalPlayer().getOrientation();
+		// Multiply by 8 to get the yaw since below method returns range of 0 to 2047 and yaw was increased to 0 to 16383
+		int playerOrientation = client.getLocalPlayer().getOrientation() * 8;
 		int targetYaw;
 
-		if (playerOrientation <= 1024) {
-			targetYaw = 512 * 2 - playerOrientation;
+		if (playerOrientation <= 8192) {
+			targetYaw = 4096 * 2 - playerOrientation;
 		} else {
-			targetYaw = 1536 * 2 - playerOrientation;
+			targetYaw = 12288 * 2 - playerOrientation;
 		}
 
 		client.setCameraYawTarget(targetYaw);
 	}
 
 	private static int degreesToYaw(int degrees) {
-		return (int) Math.round(degrees * 2048.0 / 360.0);
+		return (int) Math.round(degrees * 16384.0 / 360.0);
 	}
 
 	private void rotateYaw(String s)
@@ -271,8 +272,8 @@ public class CompassCameraControlPlugin extends Plugin
 			targetYaw = currentYaw - shift;
 		}
 
-		// Wraps yaw into camera range [0,2048)
-		targetYaw &= 2047;
+		// Wraps yaw into camera range [0,16384)
+		targetYaw &= 16383;
 
 		client.setCameraYawTarget(targetYaw);
 	}
