@@ -7,7 +7,6 @@ import java.awt.event.KeyEvent;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
-import net.runelite.api.GameState;
 import net.runelite.api.KeyCode;
 import net.runelite.api.MenuAction;
 import net.runelite.api.MenuEntry;
@@ -283,18 +282,8 @@ public class CompassCameraControlPlugin extends Plugin
 		client.setCameraYawTarget(targetYaw);
 	}
 
-	private boolean shouldSuppressHotkeysForInputContext()
+	private boolean shouldSuppressHotkeysForChat()
 	{
-		if (client.getGameState() != GameState.LOGGED_IN)
-		{
-			return true;
-		}
-
-		if (client.getFocusedInputFieldWidget() != null)
-		{
-			return true;
-		}
-
 		if (client.getVarcIntValue(VarClientID.MESLAYERMODE) != InputType.NONE.getType())
 		{
 			return true;
@@ -306,23 +295,21 @@ public class CompassCameraControlPlugin extends Plugin
 			return true;
 		}
 
-		Widget chatboxInput = client.getWidget(InterfaceID.Chatbox.INPUT);
-		if (chatboxInput != null && !chatboxInput.isSelfHidden())
-		{
-			String text = chatboxInput.getText();
-			if (text != null && text.contains("*"))
-			{
-				return true;
-			}
-		}
+		return isChatboxCaretActive();
+	}
 
-		Widget worldMapSearch = client.getWidget(InterfaceID.Worldmap.MAPLIST_DISPLAY);
-		if (worldMapSearch != null && client.getVarcIntValue(VarClientID.WORLDMAP_SEARCHING) == 1)
+	private boolean shouldSuppressHotkeysForInterfaces()
+	{
+		if (client.getFocusedInputFieldWidget() != null)
 		{
 			return true;
 		}
 
-		// Mirror RuneLite chatbox key handling: if these are hidden, another interface is handling key input.
+		if (isWorldMapSearchActive())
+		{
+			return true;
+		}
+
 		if (isWidgetHidden(InterfaceID.Chatbox.MES_LAYER_HIDE) || isWidgetHidden(InterfaceID.Chatbox.CHATDISPLAY))
 		{
 			return true;
@@ -338,6 +325,24 @@ public class CompassCameraControlPlugin extends Plugin
 		return widget == null || widget.isSelfHidden();
 	}
 
+	private boolean isChatboxCaretActive()
+	{
+		Widget chatboxInput = client.getWidget(InterfaceID.Chatbox.INPUT);
+		if (chatboxInput != null && !chatboxInput.isSelfHidden())
+		{
+			String text = chatboxInput.getText();
+			return text != null && text.contains("*");
+		}
+
+		return false;
+	}
+
+	private boolean isWorldMapSearchActive()
+	{
+		Widget worldMapSearch = client.getWidget(InterfaceID.Worldmap.MAPLIST_DISPLAY);
+		return worldMapSearch != null && client.getVarcIntValue(VarClientID.WORLDMAP_SEARCHING) == 1;
+	}
+
 	
 	private final KeyListener keyListener = new KeyListener() {
 		@Override
@@ -348,7 +353,7 @@ public class CompassCameraControlPlugin extends Plugin
 
 		@Override
 		public void keyPressed(KeyEvent event) {
-			if (config.deprioritizeInInputContexts() && shouldSuppressHotkeysForInputContext())
+			if ((config.deprioritizeInChat() && shouldSuppressHotkeysForChat()) || (config.deprioritizeInInterfaces() && shouldSuppressHotkeysForInterfaces()))
 			{
 				return;
 			}
