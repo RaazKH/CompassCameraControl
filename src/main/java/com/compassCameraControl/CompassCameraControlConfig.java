@@ -201,4 +201,27 @@ public interface CompassCameraControlConfig extends Config
 	{
 		return 90;
 	}
+
+	@ConfigItem(
+		keyName = "deprioritizeInChat",
+		name = "Disable Keybindings in Chat",
+		position = 18,
+		description = "Disable plugin keybindings while typing in chat<br/>" +
+				"If the \"Key Remapping\" plugin is off, chat is auto focused and keybindings will not trigger"
+	)
+	default boolean deprioritizeInChat()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "deprioritizeInInterfaces",
+		name = "Disable Keybindings in Interfaces",
+		position = 19,
+		description = "Disable plugin keybindings while interfaces are capturing input"
+	)
+	default boolean deprioritizeInInterfaces()
+	{
+		return false;
+	}
 }

@@ -12,6 +12,10 @@ import net.runelite.api.MenuAction;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.SoundEffectID;
 import net.runelite.api.events.MenuEntryAdded;
+import net.runelite.api.gameval.InterfaceID;
+import net.runelite.api.gameval.VarClientID;
+import net.runelite.api.vars.InputType;
+import net.runelite.api.widgets.Widget;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.input.KeyListener;
@@ -277,6 +281,68 @@ public class CompassCameraControlPlugin extends Plugin
 
 		client.setCameraYawTarget(targetYaw);
 	}
+
+	private boolean shouldSuppressHotkeysForChat()
+	{
+		if (client.getVarcIntValue(VarClientID.MESLAYERMODE) != InputType.NONE.getType())
+		{
+			return true;
+		}
+
+		String chatInput = client.getVarcStrValue(VarClientID.CHATINPUT);
+		if (chatInput != null && !chatInput.isEmpty())
+		{
+			return true;
+		}
+
+		return isChatboxCaretActive();
+	}
+
+	private boolean shouldSuppressHotkeysForInterfaces()
+	{
+		if (client.getFocusedInputFieldWidget() != null)
+		{
+			return true;
+		}
+
+		if (isWorldMapSearchActive())
+		{
+			return true;
+		}
+
+		if (isWidgetHidden(InterfaceID.Chatbox.MES_LAYER_HIDE) || isWidgetHidden(InterfaceID.Chatbox.CHATDISPLAY))
+		{
+			return true;
+		}
+
+		Widget optionsDialog = client.getWidget(InterfaceID.Chatmenu.OPTIONS);
+		return optionsDialog != null && !optionsDialog.isSelfHidden();
+	}
+
+	private boolean isWidgetHidden(int component)
+	{
+		Widget widget = client.getWidget(component);
+		return widget == null || widget.isSelfHidden();
+	}
+
+	private boolean isChatboxCaretActive()
+	{
+		Widget chatboxInput = client.getWidget(InterfaceID.Chatbox.INPUT);
+		if (chatboxInput != null && !chatboxInput.isSelfHidden())
+		{
+			String text = chatboxInput.getText();
+			return text != null && text.contains("*");
+		}
+
+		return false;
+	}
+
+	private boolean isWorldMapSearchActive()
+	{
+		Widget worldMapSearch = client.getWidget(InterfaceID.Worldmap.MAPLIST_DISPLAY);
+		return worldMapSearch != null && client.getVarcIntValue(VarClientID.WORLDMAP_SEARCHING) == 1;
+	}
+
 	
 	private final KeyListener keyListener = new KeyListener() {
 		@Override
@@ -287,6 +353,11 @@ public class CompassCameraControlPlugin extends Plugin
 
 		@Override
 		public void keyPressed(KeyEvent event) {
+			if ((config.deprioritizeInChat() && shouldSuppressHotkeysForChat()) || (config.deprioritizeInInterfaces() && shouldSuppressHotkeysForInterfaces()))
+			{
+				return;
+			}
+
 			boolean handledEvent = true;
 			if (config.snapFacingKey().matches(event)) {
 				facingYaw();
