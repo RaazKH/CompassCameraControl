@@ -290,14 +290,30 @@ public class CompassCameraControlPlugin extends Plugin
 			return true;
 		}
 
-		if (isTypingInChat())
+		if (client.getFocusedInputFieldWidget() != null)
 		{
 			return true;
 		}
 
-		if (client.getFocusedInputFieldWidget() != null)
+		if (client.getVarcIntValue(VarClientID.MESLAYERMODE) != InputType.NONE.getType())
 		{
 			return true;
+		}
+
+		String chatInput = client.getVarcStrValue(VarClientID.CHATINPUT);
+		if (chatInput != null && !chatInput.isEmpty())
+		{
+			return true;
+		}
+
+		Widget chatboxInput = client.getWidget(InterfaceID.Chatbox.INPUT);
+		if (chatboxInput != null && !chatboxInput.isSelfHidden())
+		{
+			String text = chatboxInput.getText();
+			if (text != null && text.contains("*"))
+			{
+				return true;
+			}
 		}
 
 		Widget worldMapSearch = client.getWidget(InterfaceID.Worldmap.MAPLIST_DISPLAY);
@@ -322,28 +338,6 @@ public class CompassCameraControlPlugin extends Plugin
 		return widget == null || widget.isSelfHidden();
 	}
 
-	private boolean isTypingInChat()
-	{
-		String chatInput = client.getVarcStrValue(VarClientID.CHATINPUT);
-		if (chatInput != null && !chatInput.isEmpty())
-		{
-			return true;
-		}
-
-		if (client.getVarcIntValue(VarClientID.MESLAYERMODE) != InputType.NONE.getType())
-		{
-			return true;
-		}
-
-		Widget chatboxInput = client.getWidget(InterfaceID.Chatbox.INPUT);
-		if (chatboxInput != null && !chatboxInput.isSelfHidden())
-		{
-			String text = chatboxInput.getText();
-			return text != null && text.contains("*");
-		}
-
-		return false;
-	}
 	
 	private final KeyListener keyListener = new KeyListener() {
 		@Override
