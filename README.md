@@ -51,7 +51,7 @@ You can set up shortcuts for quick camera control. To prevent shortcuts from app
 ### Keybind Options
 - **Rotate After Snap**: Snap to the closest cardinal direction before rotation, applies to all rotation keybindings
 - **Rotation Value**: Set rotation value for clockwise and counterclockwise rotation keybindings
-- **Disable Keybindings in Chat**: Disables plugin keybinds while typing in chat. If "Disable Keybindings in Chat" is enabled and the "Key Remapping" plugin is off, chat is focused by default so plugin keybinds will not trigger with this turned on.
+- **Disable Keybindings in Chat**: Disables plugin keybinds while typing in chat. If "Disable Keybindings in Chat" is enabled and the "Key Remapping" plugin is off, chat is focused by default so plugin keybinds will not trigger.
 - **Disable Keybindings in Interfaces**: Disables plugin keybinds while non-chat interfaces are capturing keyboard input
 ---
 ### Custom Cycle Order
