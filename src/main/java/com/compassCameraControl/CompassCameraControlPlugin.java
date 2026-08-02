@@ -305,6 +305,13 @@ public class CompassCameraControlPlugin extends Plugin
 			return true;
 		}
 
+		// Sailing boat selection interface uses space
+		// If more edge cases come up we can maybe check HasListener
+		if (!isWidgetHidden(InterfaceID.SailingBoatSelection.UNIVERSE))
+		{
+			return true;
+		}
+
 		if (isWorldMapSearchActive())
 		{
 			return true;
