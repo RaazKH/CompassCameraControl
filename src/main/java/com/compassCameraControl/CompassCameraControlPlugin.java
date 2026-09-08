@@ -305,14 +305,8 @@ public class CompassCameraControlPlugin extends Plugin
 			return true;
 		}
 
-		// Sailing boat selection interface uses space
-		// If more edge cases come up we can maybe check HasListener
-		if (!isWidgetHidden(InterfaceID.SailingBoatSelection.UNIVERSE))
-		{
-			return true;
-		}
-
-		if (isWorldMapSearchActive())
+		if (client.getComponentTable().get(InterfaceID.ToplevelOsrsStretch.MAINMODAL) != null
+			|| client.getComponentTable().get(InterfaceID.ToplevelOsrsStretch.FLOATER) != null)
 		{
 			return true;
 		}
@@ -322,8 +316,7 @@ public class CompassCameraControlPlugin extends Plugin
 			return true;
 		}
 
-		Widget optionsDialog = client.getWidget(InterfaceID.Chatmenu.OPTIONS);
-		return optionsDialog != null && !optionsDialog.isSelfHidden();
+		return !isWidgetHidden(InterfaceID.Chatmenu.OPTIONS);
 	}
 
 	private boolean isWidgetHidden(int component)
@@ -342,12 +335,6 @@ public class CompassCameraControlPlugin extends Plugin
 		}
 
 		return false;
-	}
-
-	private boolean isWorldMapSearchActive()
-	{
-		Widget worldMapSearch = client.getWidget(InterfaceID.Worldmap.MAPLIST_DISPLAY);
-		return worldMapSearch != null && client.getVarcIntValue(VarClientID.WORLDMAP_SEARCHING) == 1;
 	}
 
 	
