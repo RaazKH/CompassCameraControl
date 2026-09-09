@@ -7,10 +7,12 @@ import java.awt.event.KeyEvent;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
+import net.runelite.api.HashTable;
 import net.runelite.api.KeyCode;
 import net.runelite.api.MenuAction;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.SoundEffectID;
+import net.runelite.api.WidgetNode;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.gameval.VarClientID;
@@ -305,12 +307,13 @@ public class CompassCameraControlPlugin extends Plugin
 			return true;
 		}
 
-		if (isInterfaceOpen(InterfaceID.ToplevelOsrsStretch.MAINMODAL)
-			|| isInterfaceOpen(InterfaceID.ToplevelOsrsStretch.FLOATER)
-			|| isInterfaceOpen(InterfaceID.ToplevelPreEoc.MAINMODAL)
-			|| isInterfaceOpen(InterfaceID.ToplevelPreEoc.FLOATER)
-			|| isInterfaceOpen(InterfaceID.Toplevel.MAINMODAL)
-			|| isInterfaceOpen(InterfaceID.Toplevel.FLOATER))
+		HashTable<WidgetNode> table = client.getComponentTable();
+		if (table.get(InterfaceID.ToplevelOsrsStretch.MAINMODAL) != null
+			|| table.get(InterfaceID.ToplevelOsrsStretch.FLOATER) != null
+			|| table.get(InterfaceID.ToplevelPreEoc.MAINMODAL) != null
+			|| table.get(InterfaceID.ToplevelPreEoc.FLOATER) != null
+			|| table.get(InterfaceID.Toplevel.MAINMODAL) != null
+			|| table.get(InterfaceID.Toplevel.FLOATER) != null)
 		{
 			return true;
 		}
@@ -327,12 +330,6 @@ public class CompassCameraControlPlugin extends Plugin
 	{
 		Widget widget = client.getWidget(component);
 		return widget == null || widget.isSelfHidden();
-	}
-
-	private boolean isInterfaceOpen(int component)
-	{
-		// Most interfaces toggle visibility on the static container; modals attach dynamically instead
-		return !isWidgetHidden(component) || client.getComponentTable().get(component) != null;
 	}
 
 	private boolean isChatboxCaretActive()
