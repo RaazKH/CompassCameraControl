@@ -305,8 +305,12 @@ public class CompassCameraControlPlugin extends Plugin
 			return true;
 		}
 
-		if (client.getComponentTable().get(InterfaceID.ToplevelOsrsStretch.MAINMODAL) != null
-			|| client.getComponentTable().get(InterfaceID.ToplevelOsrsStretch.FLOATER) != null)
+		if (isInterfaceOpen(InterfaceID.ToplevelOsrsStretch.MAINMODAL)
+			|| isInterfaceOpen(InterfaceID.ToplevelOsrsStretch.FLOATER)
+			|| isInterfaceOpen(InterfaceID.ToplevelPreEoc.MAINMODAL)
+			|| isInterfaceOpen(InterfaceID.ToplevelPreEoc.FLOATER)
+			|| isInterfaceOpen(InterfaceID.Toplevel.MAINMODAL)
+			|| isInterfaceOpen(InterfaceID.Toplevel.FLOATER))
 		{
 			return true;
 		}
@@ -323,6 +327,12 @@ public class CompassCameraControlPlugin extends Plugin
 	{
 		Widget widget = client.getWidget(component);
 		return widget == null || widget.isSelfHidden();
+	}
+
+	private boolean isInterfaceOpen(int component)
+	{
+		// Most interfaces toggle visibility on the static container; modals attach dynamically instead
+		return !isWidgetHidden(component) || client.getComponentTable().get(component) != null;
 	}
 
 	private boolean isChatboxCaretActive()
