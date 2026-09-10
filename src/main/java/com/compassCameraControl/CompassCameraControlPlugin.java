@@ -7,14 +7,12 @@ import java.awt.event.KeyEvent;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
-import net.runelite.api.GameState;
 import net.runelite.api.HashTable;
 import net.runelite.api.KeyCode;
 import net.runelite.api.MenuAction;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.SoundEffectID;
 import net.runelite.api.WidgetNode;
-import net.runelite.api.events.BeforeRender;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.gameval.VarClientID;
@@ -64,13 +62,6 @@ public class CompassCameraControlPlugin extends Plugin
 	private static final long HYBRID_CYCLE_TIMEOUT_MS = 2000L;
 
 	private long lastHybridClickTimeMs;
-	private volatile boolean suppressForInterfaces;
-
-	@Subscribe
-	public void onBeforeRender(BeforeRender event)
-	{
-		suppressForInterfaces = client.getGameState() == GameState.LOGGED_IN && shouldSuppressHotkeysForInterfaces();
-	}
 
 	@Subscribe
 	public void onMenuEntryAdded(MenuEntryAdded event)
@@ -317,15 +308,24 @@ public class CompassCameraControlPlugin extends Plugin
 		}
 
 		HashTable<WidgetNode> table = client.getComponentTable();
-		if (table != null && (table.get(InterfaceID.ToplevelOsrsStretch.MAINMODAL) != null
-			|| table.get(InterfaceID.ToplevelOsrsStretch.FLOATER) != null
-			|| table.get(InterfaceID.ToplevelPreEoc.MAINMODAL) != null
-			|| table.get(InterfaceID.ToplevelPreEoc.FLOATER) != null
-			|| table.get(InterfaceID.Toplevel.MAINMODAL) != null
-			|| table.get(InterfaceID.Toplevel.FLOATER) != null))
+		try
 		{
-			return true;
+			if (table != null && (table.get(InterfaceID.ToplevelOsrsStretch.MAINMODAL) != null
+				|| table.get(InterfaceID.ToplevelOsrsStretch.FLOATER) != null
+				|| table.get(InterfaceID.ToplevelPreEoc.MAINMODAL) != null
+				|| table.get(InterfaceID.ToplevelPreEoc.FLOATER) != null
+				|| table.get(InterfaceID.Toplevel.MAINMODAL) != null
+				|| table.get(InterfaceID.Toplevel.FLOATER) != null))
+			{
+				return true;
+			}
 		}
+		catch (Exception e)
+		{
+			log.debug("Interface suppression check failed", e);
+			return false;
+		}
+
 
 		if (isWidgetHidden(InterfaceID.Chatbox.MES_LAYER_HIDE) || isWidgetHidden(InterfaceID.Chatbox.CHATDISPLAY))
 		{
@@ -363,7 +363,7 @@ public class CompassCameraControlPlugin extends Plugin
 
 		@Override
 		public void keyPressed(KeyEvent event) {
-			if ((config.deprioritizeInChat() && shouldSuppressHotkeysForChat()) || (config.deprioritizeInInterfaces() && suppressForInterfaces))
+			if ((config.deprioritizeInChat() && shouldSuppressHotkeysForChat()) || (config.deprioritizeInInterfaces() && shouldSuppressHotkeysForInterfaces()))
 			{
 				return;
 			}
@@ -408,7 +408,6 @@ public class CompassCameraControlPlugin extends Plugin
 
 	@Override
 	protected void shutDown() throws Exception {
-		suppressForInterfaces = false;
 		keyManager.unregisterKeyListener(keyListener);
 	}
 }
