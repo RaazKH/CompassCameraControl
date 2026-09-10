@@ -308,15 +308,24 @@ public class CompassCameraControlPlugin extends Plugin
 		}
 
 		HashTable<WidgetNode> table = client.getComponentTable();
-		if (table.get(InterfaceID.ToplevelOsrsStretch.MAINMODAL) != null
-			|| table.get(InterfaceID.ToplevelOsrsStretch.FLOATER) != null
-			|| table.get(InterfaceID.ToplevelPreEoc.MAINMODAL) != null
-			|| table.get(InterfaceID.ToplevelPreEoc.FLOATER) != null
-			|| table.get(InterfaceID.Toplevel.MAINMODAL) != null
-			|| table.get(InterfaceID.Toplevel.FLOATER) != null)
+		try
 		{
-			return true;
+			if (table != null && (table.get(InterfaceID.ToplevelOsrsStretch.MAINMODAL) != null
+				|| table.get(InterfaceID.ToplevelOsrsStretch.FLOATER) != null
+				|| table.get(InterfaceID.ToplevelPreEoc.MAINMODAL) != null
+				|| table.get(InterfaceID.ToplevelPreEoc.FLOATER) != null
+				|| table.get(InterfaceID.Toplevel.MAINMODAL) != null
+				|| table.get(InterfaceID.Toplevel.FLOATER) != null))
+			{
+				return true;
+			}
 		}
+		catch (Exception e)
+		{
+			log.debug("Interface suppression check failed", e);
+			return false;
+		}
+
 
 		if (isWidgetHidden(InterfaceID.Chatbox.MES_LAYER_HIDE) || isWidgetHidden(InterfaceID.Chatbox.CHATDISPLAY))
 		{
