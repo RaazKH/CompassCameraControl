@@ -308,12 +308,12 @@ public class CompassCameraControlPlugin extends Plugin
 		}
 
 		HashTable<WidgetNode> table = client.getComponentTable();
-		if (table.get(InterfaceID.ToplevelOsrsStretch.MAINMODAL) != null
+		if (table != null && (table.get(InterfaceID.ToplevelOsrsStretch.MAINMODAL) != null
 			|| table.get(InterfaceID.ToplevelOsrsStretch.FLOATER) != null
 			|| table.get(InterfaceID.ToplevelPreEoc.MAINMODAL) != null
 			|| table.get(InterfaceID.ToplevelPreEoc.FLOATER) != null
 			|| table.get(InterfaceID.Toplevel.MAINMODAL) != null
-			|| table.get(InterfaceID.Toplevel.FLOATER) != null)
+			|| table.get(InterfaceID.Toplevel.FLOATER) != null))
 		{
 			return true;
 		}
