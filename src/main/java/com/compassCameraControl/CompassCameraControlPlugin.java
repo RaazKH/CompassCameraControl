@@ -322,6 +322,7 @@ public class CompassCameraControlPlugin extends Plugin
 		}
 		catch (Exception e)
 		{
+			log.debug("Interface suppression check failed", e);
 			return false;
 		}
 
