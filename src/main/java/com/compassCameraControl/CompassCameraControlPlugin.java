@@ -13,6 +13,7 @@ import net.runelite.api.MenuAction;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.SoundEffectID;
 import net.runelite.api.WidgetNode;
+import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.gameval.VarClientID;
@@ -62,6 +63,13 @@ public class CompassCameraControlPlugin extends Plugin
 	private static final long HYBRID_CYCLE_TIMEOUT_MS = 2000L;
 
 	private long lastHybridClickTimeMs;
+	private volatile boolean suppressForInterfaces;
+
+	@Subscribe
+	public void onGameTick(GameTick event)
+	{
+		suppressForInterfaces = config.deprioritizeInInterfaces() && shouldSuppressHotkeysForInterfaces();
+	}
 
 	@Subscribe
 	public void onMenuEntryAdded(MenuEntryAdded event)
@@ -363,7 +371,7 @@ public class CompassCameraControlPlugin extends Plugin
 
 		@Override
 		public void keyPressed(KeyEvent event) {
-			if ((config.deprioritizeInChat() && shouldSuppressHotkeysForChat()) || (config.deprioritizeInInterfaces() && shouldSuppressHotkeysForInterfaces()))
+			if ((config.deprioritizeInChat() && shouldSuppressHotkeysForChat()) || (config.deprioritizeInInterfaces() && suppressForInterfaces))
 			{
 				return;
 			}
@@ -408,6 +416,7 @@ public class CompassCameraControlPlugin extends Plugin
 
 	@Override
 	protected void shutDown() throws Exception {
+		suppressForInterfaces = false;
 		keyManager.unregisterKeyListener(keyListener);
 	}
 }
