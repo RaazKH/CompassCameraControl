@@ -81,12 +81,21 @@ public class CompassCameraControlPlugin extends Plugin
 	private boolean isTopLevelInterfaceOpen()
 	{
 		HashTable<WidgetNode> table = client.getComponentTable();
-		return table != null && (table.get(InterfaceID.ToplevelOsrsStretch.MAINMODAL) != null
-			|| table.get(InterfaceID.ToplevelOsrsStretch.FLOATER) != null
-			|| table.get(InterfaceID.ToplevelPreEoc.MAINMODAL) != null
-			|| table.get(InterfaceID.ToplevelPreEoc.FLOATER) != null
-			|| table.get(InterfaceID.Toplevel.MAINMODAL) != null
-			|| table.get(InterfaceID.Toplevel.FLOATER) != null);
+		try
+		{
+			return table != null && (table.get(InterfaceID.ToplevelOsrsStretch.MAINMODAL) != null
+				|| table.get(InterfaceID.ToplevelOsrsStretch.FLOATER) != null
+				|| table.get(InterfaceID.ToplevelPreEoc.MAINMODAL) != null
+				|| table.get(InterfaceID.ToplevelPreEoc.FLOATER) != null
+				|| table.get(InterfaceID.Toplevel.MAINMODAL) != null
+				|| table.get(InterfaceID.Toplevel.FLOATER) != null);
+		}
+		catch (Exception e)
+		{
+			log.warn("Interface suppression check failed", e);
+			log.debug("Interface suppression check failed", e);
+			return false;
+		}
 	}
 
 	@Subscribe
