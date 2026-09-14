@@ -75,7 +75,10 @@ public class CompassCameraControlPlugin extends Plugin
 	@Subscribe
 	public void onWidgetClosed(WidgetClosed event)
 	{
-		topLevelInterfaceOpen = config.deprioritizeInInterfaces() && isTopLevelInterfaceOpen();
+		if (event.isUnload())
+		{
+			topLevelInterfaceOpen = false;
+		}
 	}
 
 	private boolean isTopLevelInterfaceOpen()
