@@ -69,34 +69,57 @@ public class CompassCameraControlPlugin extends Plugin
 	@Subscribe
 	public void onWidgetLoaded(WidgetLoaded event)
 	{
-		topLevelInterfaceOpen = config.deprioritizeInInterfaces() && isTopLevelInterfaceOpen();
+		topLevelInterfaceOpen = config.deprioritizeInInterfaces() && isTopLevelInterfaceOpen(-1, false);
 	}
 
 	@Subscribe
 	public void onWidgetClosed(WidgetClosed event)
 	{
-		if (event.isUnload())
-		{
-			topLevelInterfaceOpen = false;
-		}
+		topLevelInterfaceOpen = config.deprioritizeInInterfaces() && isTopLevelInterfaceOpen(event.getGroupId(), event.isUnload());
 	}
 
-	private boolean isTopLevelInterfaceOpen()
+
+	private boolean isTopLevelInterfaceOpen(int closingGroupId, boolean closingUnload)
 	{
-		HashTable<WidgetNode> table = client.getComponentTable();
 		try
 		{
-			return table != null && (table.get(InterfaceID.ToplevelOsrsStretch.MAINMODAL) != null
-				|| table.get(InterfaceID.ToplevelOsrsStretch.FLOATER) != null
-				|| table.get(InterfaceID.ToplevelPreEoc.MAINMODAL) != null
-				|| table.get(InterfaceID.ToplevelPreEoc.FLOATER) != null
-				|| table.get(InterfaceID.Toplevel.MAINMODAL) != null
-				|| table.get(InterfaceID.Toplevel.FLOATER) != null);
+			HashTable<WidgetNode> table = client.getComponentTable();
+			if (table == null)
+			{
+				return false;
+			}
+
+			WidgetNode osrsStretchMain = table.get(InterfaceID.ToplevelOsrsStretch.MAINMODAL);
+			WidgetNode osrsStretchFloat = table.get(InterfaceID.ToplevelOsrsStretch.FLOATER);
+			WidgetNode preEocMain = table.get(InterfaceID.ToplevelPreEoc.MAINMODAL);
+			WidgetNode preEocFloat = table.get(InterfaceID.ToplevelPreEoc.FLOATER);
+			WidgetNode toplevelMain = table.get(InterfaceID.Toplevel.MAINMODAL);
+			WidgetNode toplevelFloat = table.get(InterfaceID.Toplevel.FLOATER);
+
+			int openCount = 0;
+			WidgetNode onlyOpen = null;
+			if (osrsStretchMain != null) { openCount++; onlyOpen = osrsStretchMain; }
+			if (osrsStretchFloat != null) { openCount++; onlyOpen = osrsStretchFloat; }
+			if (preEocMain != null) { openCount++; onlyOpen = preEocMain; }
+			if (preEocFloat != null) { openCount++; onlyOpen = preEocFloat; }
+			if (toplevelMain != null) { openCount++; onlyOpen = toplevelMain; }
+			if (toplevelFloat != null) { openCount++; onlyOpen = toplevelFloat; }
+
+			if (openCount == 0)
+			{
+				return false;
+			}
+
+			if (openCount == 1 && closingUnload && onlyOpen.getId() == closingGroupId)
+			{
+				return false;
+			}
+
+			return true;
 		}
 		catch (Exception e)
 		{
 			log.warn("Interface suppression check failed", e);
-			log.debug("Interface suppression check failed", e);
 			return false;
 		}
 	}
