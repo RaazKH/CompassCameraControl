@@ -28,11 +28,13 @@ If you click again within 2 seconds while already on an allowed direction, it wi
 If you wait longer than 2 seconds, the next click re-snaps instead of cycling.
 For example, with cycle order "N,S": First click from South-East snaps to South. A quick second click cycles to North. If you wait a few seconds, a click re-centers instead of cycling.
 
-### Shift-Click Option
-You can configure how the plugin responds to clicks on the compass:
-- **Off**: Always active, ignoring the Shift key.
-- **On Shift**: Only works when Shift is held down.
-- **Off Shift**: Works only when Shift is not held down.
+### Shift-Click and Ctrl-Click Options
+You can configure how the plugin responds to clicks on the compass, separately for the Shift and Ctrl keys:
+- **Off**: Always active, ignoring the key.
+- **On Shift / On Ctrl**: Only works when the key is held down.
+- **Off Shift / Off Ctrl**: Works only when the key is not held down.
+
+Both options are checked independently. For example, with **On Shift** and **On Ctrl**, both keys must be held down.
 
 ## Keybindings
 You can set up shortcuts for quick camera control. To prevent shortcuts from appearing in the chat, enable the "Key Remapping" plugin (included with RuneLite).
