@@ -129,10 +129,17 @@ public class CompassCameraControlPlugin extends Plugin
 	{
 		if (event.getOption().equals("Look North"))
 		{
-			if (config.shiftClickMode() != ShiftMode.OFF) {
+			ShiftMode shiftMode = config.shiftClickMode();
+			CtrlClickMode ctrlMode = config.ctrlClickMode();
+			if (shiftMode != ShiftMode.OFF || ctrlMode != CtrlClickMode.OFF) {
 				boolean shiftHeld = client.isKeyPressed(KeyCode.KC_SHIFT);
-				if (config.shiftClickMode() == ShiftMode.ONSHIFT && !shiftHeld) return;
-				if (config.shiftClickMode() == ShiftMode.OFFSHIFT && shiftHeld) return;
+				boolean ctrlHeld = client.isKeyPressed(KeyCode.KC_CONTROL);
+
+				if (shiftMode == ShiftMode.OFFSHIFT && shiftHeld) return;
+				if (ctrlMode == CtrlClickMode.OFFCONTROL && ctrlHeld) return;
+
+				if (shiftMode == ShiftMode.ONSHIFT && !shiftHeld) return;
+				if (ctrlMode == CtrlClickMode.ONCONTROL && !ctrlHeld) return;
 			}
 
 			String newOption;
