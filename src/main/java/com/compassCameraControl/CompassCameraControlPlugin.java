@@ -60,7 +60,9 @@ public class CompassCameraControlPlugin extends Plugin
 	private static final String SNAP_FACING = "Snap Facing";
 	private static final String SNAP_CARDINAL = "Snap Cardinal";
 	private static final String CYCLE_CARDINAL = "Cycle Cardinal";
+	private static final String REVERSE_CYCLE = "Reverse Cycle";
 	private static final String SNAP_THEN_CYCLE = "Snap Then Cycle";
+	private static final String SNAP_THEN_REVERSE_CYCLE = "Snap Then Reverse Cycle";
 	private static final long HYBRID_CYCLE_TIMEOUT_MS = 2000L;
 
 	private long lastHybridClickTimeMs;
@@ -154,12 +156,12 @@ public class CompassCameraControlPlugin extends Plugin
 					break;
 
 				case SNAP_THEN_CYCLE:
-					newOption = SNAP_THEN_CYCLE;
+					newOption = isReverseModifierHeld() ? SNAP_THEN_REVERSE_CYCLE : SNAP_THEN_CYCLE;
 					break;
 
 				case CYCLE:
 				default:
-					newOption = CYCLE_CARDINAL;
+					newOption = isReverseModifierHeld() ? REVERSE_CYCLE : CYCLE_CARDINAL;
 					break;
 			}
 
@@ -186,12 +188,14 @@ public class CompassCameraControlPlugin extends Plugin
 				break;
 
 			case SNAP_THEN_CYCLE:
-				hybridSnapThenCycle();
+			case SNAP_THEN_REVERSE_CYCLE:
+				hybridSnapThenCycle(isReverseModifierHeld());
 				client.playSoundEffect(SoundEffectID.UI_BOOP);
 				break;
 
 			case CYCLE_CARDINAL:
-				cycleYaw();
+			case REVERSE_CYCLE:
+				cycleYaw(isReverseModifierHeld());
 				client.playSoundEffect(SoundEffectID.UI_BOOP);
 				break;
 		}
@@ -226,22 +230,29 @@ public class CompassCameraControlPlugin extends Plugin
 			.toArray();
 	}
 
-	private void cycleYaw()
+	private boolean isReverseModifierHeld()
 	{
-		// Overloaded method so cycleOrderToYaws isn't called twice when using hybridSnapThenCycle()
-		cycleYaw(cycleOrderToYaws());
+		return (config.shiftClickMode() == ShiftMode.ONSHIFT_REVERSE && client.isKeyPressed(KeyCode.KC_SHIFT))
+			|| (config.ctrlClickMode() == CtrlClickMode.ONCONTROL_REVERSE && client.isKeyPressed(KeyCode.KC_CONTROL));
 	}
 
-	private void cycleYaw(int[] yawOrder)
+	private void cycleYaw(boolean reverse)
+	{
+		// Overloaded method so cycleOrderToYaws isn't called twice when using hybridSnapThenCycle()
+		cycleYaw(cycleOrderToYaws(), reverse);
+	}
+
+	private void cycleYaw(int[] yawOrder, boolean reverse)
 	{
 		int currentYaw = client.getCameraYaw();
-		int nextYaw = yawOrder[0];
+		int nextYaw = reverse ? yawOrder[yawOrder.length - 1] : yawOrder[0];
+		int step = reverse ? -1 : 1;
 
 		for (int i = 0; i < yawOrder.length; i++)
 		{
 			if (yawOrder[i] == currentYaw)
 			{
-				nextYaw = yawOrder[(i + 1) % yawOrder.length];
+				nextYaw = yawOrder[(i + step + yawOrder.length) % yawOrder.length];
 				break;
 			}
 		}
@@ -274,7 +285,7 @@ public class CompassCameraControlPlugin extends Plugin
 		client.setCameraYawTarget(closestYaw);
 	}
 
-	private void hybridSnapThenCycle()
+	private void hybridSnapThenCycle(boolean reverse)
 	{
 		long nowMs = System.currentTimeMillis();
 		int currentYaw = client.getCameraYaw();
@@ -293,7 +304,7 @@ public class CompassCameraControlPlugin extends Plugin
 
 		if (isOnAllowedCardinal && (nowMs - lastHybridClickTimeMs) <= HYBRID_CYCLE_TIMEOUT_MS)
 		{
-			cycleYaw(allowedYaws);
+			cycleYaw(allowedYaws, reverse);
 		}
 		else
 		{
@@ -427,9 +438,13 @@ public class CompassCameraControlPlugin extends Plugin
 			} else if (config.snapCloseKey().matches(event)) {
 				alignYaw();
 			} else if (config.cycleCardinalKey().matches(event)) {
-				cycleYaw();
+				cycleYaw(false);
+			} else if (config.reverseCycleKey().matches(event)) {
+				cycleYaw(true);
 			} else if (config.snapThenCycleKey().matches(event)) {
-				hybridSnapThenCycle();
+				hybridSnapThenCycle(false);
+			} else if (config.snapThenReverseCycleKey().matches(event)) {
+				hybridSnapThenCycle(true);
 			} else if (config.lookNorthKey().matches(event)) {
 				client.setCameraYawTarget(NORTH_YAW);
 			} else if (config.lookSouthKey().matches(event)) {

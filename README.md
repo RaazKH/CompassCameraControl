@@ -33,6 +33,7 @@ You can configure how the plugin responds to clicks on the compass, separately f
 - **Off**: Always active, ignoring the key.
 - **On Shift / On Ctrl**: Only works when the key is held down.
 - **Off Shift / Off Ctrl**: Works only when the key is not held down.
+- **On Shift Reverse Cycle / On Ctrl Reverse Cycle**: Always active; while the key is held down, `Cycle` and `Snap Then Cycle` run through the cycle order in *reverse*. If the camera is not on an allowed direction, a reverse cycle starts at the last direction in the cycle order. Has no effect in `Snap to Closest` and `Snap to Facing` modes.
 
 Both options are checked independently. For example, with **On Shift** and **On Ctrl**, both keys must be held down.
 
@@ -42,7 +43,9 @@ You can set up shortcuts for quick camera control. To prevent shortcuts from app
 - **Snap to Facing**: Snap camera to your character's facing direction when pressed
 - **Snap to Closest**: Snap camera to the closest cardinal direction when pressed
 - **Cycle Cardinal**: Cycle through your custom cycle order of directions when pressed
+- **Reverse Cycle**: Cycle through your custom cycle order in reverse when pressed
 - **Snap Then Cycle**: Snap to closest allowed direction; quick re-press (within 2 seconds) cycles
+- **Snap Then Reverse Cycle**: Snap to closest allowed direction; quick re-press (within 2 seconds) cycles in reverse
 - **Look North Key**: Face camera North when pressed
 - **Look South Key**: Face camera South when pressed
 - **Look East Key**: Face camera East when pressed
