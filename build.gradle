@@ -34,6 +34,15 @@ tasks.withType(JavaCompile).configureEach {
 	options.release.set(11)
 }
 
+tasks.register('runPlugin', JavaExec) {
+	group = 'application'
+	classpath = sourceSets.test.runtimeClasspath
+	mainClass.set('com.compassCameraControl.CompassCameraControlPluginTest')
+	enableAssertions = true
+	jvmArgs '--add-opens=java.desktop/com.apple.eawt=ALL-UNNAMED'
+	args '--developer-mode', '--debug'
+}
+
 tasks.register('shadowJar', Jar) {
 	dependsOn configurations.testRuntimeClasspath
 	manifest {

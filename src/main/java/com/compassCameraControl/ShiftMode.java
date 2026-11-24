@@ -9,6 +9,7 @@ public enum ShiftMode
 	OFF("Off"),
 	ONSHIFT("On Shift"),
 	OFFSHIFT("Off Shift"),
+	ONSHIFT_REVERSE("On Shift Reverse Cycle"),
 	;
 
 	private final String name;
